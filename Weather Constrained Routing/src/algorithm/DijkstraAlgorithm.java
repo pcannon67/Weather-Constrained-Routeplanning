@@ -1,17 +1,14 @@
 package algorithm;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.Stack;
 
 import tools.GraphTools;
 
 import models.Edge;
 import models.Graph;
 import models.Node;
-
 
 public class DijkstraAlgorithm {
 	
@@ -34,19 +31,19 @@ public class DijkstraAlgorithm {
         return distance.get(target);
     }
     
-    public List<Node> computeShortestPath(Node source, Node target) {
-    	List<Node> path = new ArrayList<Node>();
+    public Stack<Node> computeShortestPath(Node source, Node target) {
+    	Stack<Node> path = new Stack<Node>();
     	
     	computePaths(source);
-    	
-    	path.add(source);
     	
     	Node u = target;
     	while(previous.get(u) != null)
     	{
-    		path.add(u);
+    		path.push(u);
     		u = previous.get(u);
     	}
+    	
+    	path.push(source);
     	
     	return path;
     }
