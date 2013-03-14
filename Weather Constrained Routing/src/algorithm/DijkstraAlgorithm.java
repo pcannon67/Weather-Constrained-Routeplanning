@@ -6,14 +6,12 @@ import java.util.Stack;
 
 import tools.GraphTools;
 
+import math.MathConsts;
 import models.Edge;
 import models.Graph;
 import models.Node;
 
 public class DijkstraAlgorithm {
-	
-	private static double INFINITY = Double.MAX_VALUE;
-	private static double EPSILON  = 0.000001;
 	
 	private Map<Node,Node> previous;
 	private Map<Node,Double> distance;
@@ -52,7 +50,7 @@ public class DijkstraAlgorithm {
     {
 		for ( Node n : graph.getNodeMap().values())
 		{
-			distance.put(n, INFINITY);
+			distance.put(n, MathConsts.INFINITY);
 			previous.put(n, null);
 		}
 		
@@ -63,17 +61,15 @@ public class DijkstraAlgorithm {
 		while(!nodes.isEmpty())
 		{
 			Node u = getMinimum(nodes);
-			System.out.println(u.getId());
 			nodes.remove(u.getId());
 			
-			if(distance.get(u) == INFINITY) break;
+			if(distance.get(u) == MathConsts.INFINITY) break;
 			
 			for(Edge e : u.getNeighbors())
 			{
 				Node neighbor = GraphTools.getNeighborFromEdge(e, u);
-				System.out.println("neighbor: "+neighbor.getId()+" of "+u.getId());
 				double alt = distance.get(u) + e.getEdgeValue();
-				if(alt < distance.get(neighbor) - EPSILON)
+				if(alt < distance.get(neighbor) - MathConsts.EPSILON)
 				{
 					distance.put(neighbor, alt);
 					previous.put(neighbor, u);
