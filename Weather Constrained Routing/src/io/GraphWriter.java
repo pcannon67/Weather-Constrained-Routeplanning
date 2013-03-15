@@ -18,7 +18,7 @@ public class GraphWriter {
 		  
 			out.write(g.getNodeCount() +  "\n");
 			for ( Edge e : g.getEdgeMap().values())
-				out.write(e.getNodeFrom().getId() + " " + e.getNodeTo().getId() + " " + e.getEdgeValue() + "\n");
+				out.write(e.getNodeFrom().getId() + " " + e.getNodeTo().getId() + " " + e.getWeight() + "\n");
 			
 			//Close the output stream
 			out.close();

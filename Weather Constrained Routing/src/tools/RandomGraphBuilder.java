@@ -9,7 +9,7 @@ import models.Node;
 public class RandomGraphBuilder extends GraphBuilder{
 	
 	//make a random graph
-	public static Graph createRandomGraph( int nodeCount, int edgeCount, int minEdgeValue, int maxEdgeValue) {
+	public static Graph createRandomGraph( int nodeCount, int edgeCount, int minWeight, int maxWeight) {
         if ( nodeCount < 1 || edgeCount < 0 ) throw new IllegalArgumentException( "nodeCount must be >= 1 and edgeCount must be >= 0!" );
         Random rnGen = new Random( System.currentTimeMillis() );
         int maxEdges = GraphTools.getMaxEdgesForGraph(nodeCount);
@@ -28,7 +28,7 @@ public class RandomGraphBuilder extends GraphBuilder{
         }
         // Create and add edgeList
         for ( int i = 0; i < edgeCount; ++i ) {
-            Edge e = GraphTools.getRandomEdge( rnGen, g, nodeKeys,minEdgeValue,maxEdgeValue);
+            Edge e = GraphTools.getRandomEdge( rnGen, g, nodeKeys,minWeight,maxWeight);
             g.addEdge( e );
         }
         return g;

@@ -32,7 +32,7 @@ public class GraphTools {
     	return (Node)values[generator.nextInt(values.length)];
     }
     
-	public static Edge getRandomEdge( Random rnGen, Graph g, String [] keys, int minEdgeValue, int maxEdgeValue) {
+	public static Edge getRandomEdge( Random rnGen, Graph g, String [] keys, int minWeight, int maxWeight) {
         if ( g.getNodeCount() < 2 ) throw new IllegalStateException( "Attempt to add edge when < 2 nodes are in graph!" );
         if ( keys == null || keys.length != g.getNodeCount() ) throw new IllegalArgumentException( "keys argument null or wrong size!" );
         Node n1 = null;
@@ -46,7 +46,7 @@ public class GraphTools {
             String id = Edge.computeDefaultEdgeId( n1, n2 );
             if ( g.getEdgeMap().get( id ) != null )
                 continue;
-            double edgeValue = Edge.generateRandomEdgeValue(minEdgeValue,maxEdgeValue);
+            double edgeValue = Edge.generateRandomEdgeValue(minWeight,maxWeight);
             retEdge = new Edge(n1,n2,id,edgeValue);
             break;
         }

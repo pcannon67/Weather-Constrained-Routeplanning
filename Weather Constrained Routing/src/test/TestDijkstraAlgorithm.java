@@ -24,12 +24,14 @@ public class TestDijkstraAlgorithm {
 		//double distance = dijkstra.computeShortestDistance(source, target);
 		//Stack<Node> path = dijkstra.computeShortestPath(source, target);
 		
+		double distance = astar.computeShortestDistance(source, target);
 		List<Node> path = astar.computePaths(source, target);
+		
 		System.out.println("Calculating from "+source.getId()+" to "+target.getId() + " using Astar algorithm");
-		//System.out.println("Distance from "+source.getId()+" to "+target.getId() + ": "+distance);
+		System.out.println("Distance from "+source.getId()+" to "+target.getId() + ": "+distance);
 		System.out.print("Path from "+source.getId()+" to "+target.getId() + ": ");
 		
-		if(path.size()>0)
+		if(path!= null && path.size()>0)
 		{
 			for (int i = 0; i < path.size()-1; i++)
 				System.out.print(path.get(i).getId() + "->");

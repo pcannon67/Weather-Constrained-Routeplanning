@@ -68,7 +68,7 @@ public class DijkstraAlgorithm {
 			for(Edge e : u.getNeighbors())
 			{
 				Node neighbor = GraphTools.getNeighborFromEdge(e, u);
-				double alt = distance.get(u) + e.getEdgeValue();
+				double alt = distance.get(u) + e.getWeight();
 				if(alt < distance.get(neighbor) - MathConsts.EPSILON)
 				{
 					distance.put(neighbor, alt);

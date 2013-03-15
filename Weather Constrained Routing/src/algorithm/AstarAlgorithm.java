@@ -14,18 +14,27 @@ import models.Node;
 public class AstarAlgorithm {
 	
 	private Map<Node,Double> fScore;
+	private Map<Node,Double> gScore;
 	
 	public AstarAlgorithm()
 	{ 
 		fScore = new HashMap<Node,Double>();
+		gScore = new HashMap<Node,Double>();
 	}
+	
+	public double computeShortestDistance(Node source, Node target) {
+    	List<Node> path = computePaths(source,target);
+    	if(path != null)
+    		return gScore.get(target);
+    	else
+    		return -1;
+    }
 	
 	public List<Node> computePaths(Node source,Node target) {
 		
 		List<Node> closedSet = new ArrayList<Node>();
 		List<Node> openSet = new ArrayList<Node>();
 		Map<Node,Node> cameFrom = new HashMap<Node,Node>();
-		Map<Node,Double> gScore = new HashMap<Node,Double>();
 		
 		openSet.add(source);
 		
@@ -42,7 +51,7 @@ public class AstarAlgorithm {
 			for(Edge e : current.getNeighbors())
 			{
 				Node neighbor = GraphTools.getNeighborFromEdge(e, current);
-				double tentativeGScore = gScore.get(current) + e.getEdgeValue();
+				double tentativeGScore = gScore.get(current) + e.getWeight();
 				if(closedSet.contains(neighbor)) {
 					if(tentativeGScore >= gScore.get(neighbor))
 						continue;	

@@ -2,20 +2,21 @@ package models;
 
 import math.MathTools;
 
-public class Edge {
+public class Edge extends Resource {
 	
 	private Node nodeFrom;
     private Node nodeTo;
-    private double edgeValue;
+    private double weight;
     private String id;
     
-    public Edge( Node nodeFrom, Node nodeTo, String id, double edgeValue ) {
+    public Edge( Node nodeFrom, Node nodeTo, String id, double weight ) {
+    	super(1,weight); //duration is equal to the weight of the edge assuming agent speed is 1 per time unit
         if ( nodeFrom == null || nodeTo== null ) throw new IllegalArgumentException( "Nodes must not be null!" );
         if ( nodeFrom == nodeTo ) throw new IllegalArgumentException( "Argument nodes must not be the same node!" );
         this.nodeFrom = nodeFrom;
         this.nodeTo = nodeTo;
         this.id = ( id == null ) ? computeDefaultEdgeId( nodeFrom, nodeTo ) : id;
-        this.edgeValue=edgeValue;
+        this.weight=weight;
     }
     
     public String getId() {
@@ -33,8 +34,8 @@ public class Edge {
             return n2.getId() + ":" + n1.getId();
     }
     
-    public static double generateRandomEdgeValue(int minEdgeValue,int maxEdgeValue) {
-    	return MathTools.randomInRange(minEdgeValue, maxEdgeValue);
+    public static double generateRandomEdgeValue(int minWeight,int maxWeight) {
+    	return MathTools.randomInRange(minWeight, maxWeight);
     }
     
     public Node getNodeFrom() {
@@ -45,12 +46,12 @@ public class Edge {
         return nodeTo;
     }
     
-    public double getEdgeValue() {
-		return edgeValue;
+    public double getWeight() {
+		return weight;
 	}
     
     @Override
     public String toString() {
-        return "Edge id: " + id + " n1: " + nodeFrom.getId() + " n2: " + nodeTo.getId() + " value: " + edgeValue;
+        return "Edge id: " + id + " n1: " + nodeFrom.getId() + " n2: " + nodeTo.getId() + " value: " + weight;
     }
 }

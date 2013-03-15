@@ -10,6 +10,7 @@ public class Node extends Resource implements Comparable<Node> {
     private List<Edge> neighbors;
     
     public Node( String id ) {
+    	super(1,1);
         this.id = id;
         neighbors = new ArrayList<Edge>();
     }
