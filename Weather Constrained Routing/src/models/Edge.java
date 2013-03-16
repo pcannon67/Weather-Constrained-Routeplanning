@@ -2,7 +2,7 @@ package models;
 
 import math.MathTools;
 
-public class Edge extends Resource {
+public class Edge {
 	
 	private Node nodeFrom;
     private Node nodeTo;
@@ -10,7 +10,6 @@ public class Edge extends Resource {
     private String id;
     
     public Edge( Node nodeFrom, Node nodeTo, String id, double weight ) {
-    	super(1,weight); //duration is equal to the weight of the edge assuming agent speed is 1 per time unit
         if ( nodeFrom == null || nodeTo== null ) throw new IllegalArgumentException( "Nodes must not be null!" );
         if ( nodeFrom == nodeTo ) throw new IllegalArgumentException( "Argument nodes must not be the same node!" );
         this.nodeFrom = nodeFrom;

@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import config.MathConsts;
+
 import tools.GraphTools;
 
-import math.MathConsts;
 import models.Edge;
 import models.Graph;
 import models.Node;

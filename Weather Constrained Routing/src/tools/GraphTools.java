@@ -3,11 +3,56 @@ package tools;
 import java.util.Map;
 import java.util.Random;
 
+import config.GraphConsts;
+
 import models.Edge;
+import models.FreeTimeWindowGraph;
+import models.FreeTimeWindowNode;
 import models.Graph;
 import models.Node;
+import models.ResourceGraph;
+import models.ResourceNode;
+import models.TimeWindow;
 
 public class GraphTools {
+	
+	public static FreeTimeWindowGraph convertResourceGraphToFreeTimeWindowGraph( ResourceGraph resourceGraph ) {
+		FreeTimeWindowGraph ftwg = new FreeTimeWindowGraph();
+		
+		//convert resourcesnodes to freetimewindows
+		/*for(ResourceNode r :resourceGraph.getNodeMap().values())
+		{
+			for(TimeWindow tw : r.getFreeTimeWindows()) {
+				FreeTimeWindowNode ftwgNode = new FreeTimeWindowNode(r.getId(),tw);
+				ftwg.addNode(ftwgNode);
+			}
+		}*/
+		return ftwg;	
+    }
+	
+	public static ResourceGraph convertGraphToResourceGraph( Graph graph ) {
+		ResourceGraph rg = new ResourceGraph();
+		
+		//convert nodes to resourcesnodes
+		for(Node n :graph.getNodeMap().values())
+			rg.addNode(new ResourceNode(n.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, GraphConsts.DEFAULT_RESOURCE_NODE_DURATION,GraphConsts.MAX_TIME_STEPS));
+		
+		//convert edges to resourcesnodes and resourceedges
+		for(Edge e :graph.getEdgeMap().values())
+		{
+			ResourceNode resourceNode = new ResourceNode(e.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, e.getWeight(),GraphConsts.MAX_TIME_STEPS);
+			
+			Edge resourceEdgeFrom = new Edge(rg.getNode(e.getNodeFrom().getId()),resourceNode,null,1);
+			Edge resourceEdgeTo = new Edge(rg.getNode(e.getNodeTo().getId()),resourceNode,null,1);
+			
+			rg.addNode(resourceNode);
+			rg.addEdge(resourceEdgeFrom);
+			rg.addEdge(resourceEdgeTo);
+		}
+		
+		
+		return rg;	
+    }
 	
 	public static int getMaxEdgesForGraph( int nodeCount ) {
         if  ( nodeCount < 0 ) throw new IllegalArgumentException( "nodeCount must be >= 0!" );

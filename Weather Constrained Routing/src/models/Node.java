@@ -3,14 +3,13 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node extends Resource implements Comparable<Node> {
+public class Node implements Comparable<Node> {
 	
 	private final String id;
     private int degree = 0;
     private List<Edge> neighbors;
     
     public Node( String id ) {
-    	super(1,1);
         this.id = id;
         neighbors = new ArrayList<Edge>();
     }
