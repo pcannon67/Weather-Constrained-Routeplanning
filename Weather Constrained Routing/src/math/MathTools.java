@@ -12,4 +12,9 @@ public class MathTools {
 	  double shifted = scaled + min;
 	  return shifted;
 	}
+	
+	public static int randomInRange(int min, int max) {
+		Random r = new Random();
+		return r.nextInt(max-min) + min;
+	}
 }

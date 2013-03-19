@@ -8,7 +8,6 @@ import java.util.Map;
 import tools.GraphTools;
 
 import models.Edge;
-import models.Graph;
 import models.Node;
 
 public class AstarAlgorithm {

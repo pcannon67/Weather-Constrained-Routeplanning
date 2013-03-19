@@ -16,17 +16,35 @@ import models.TimeWindow;
 
 public class GraphTools {
 	
+	public static FreeTimeWindowGraph convertGraphToFreeTimeWindowGraph( Graph graph ) {
+		return convertResourceGraphToFreeTimeWindowGraph(convertGraphToResourceGraph(graph));
+	}
+	
 	public static FreeTimeWindowGraph convertResourceGraphToFreeTimeWindowGraph( ResourceGraph resourceGraph ) {
 		FreeTimeWindowGraph ftwg = new FreeTimeWindowGraph();
 		
 		//convert resourcesnodes to freetimewindows
-		/*for(ResourceNode r :resourceGraph.getNodeMap().values())
-		{
+		for(Node n : resourceGraph.getNodeMap().values()) {
+			ResourceNode r = (ResourceNode) n;
 			for(TimeWindow tw : r.getFreeTimeWindows()) {
-				FreeTimeWindowNode ftwgNode = new FreeTimeWindowNode(r.getId(),tw);
+				FreeTimeWindowNode ftwgNode = new FreeTimeWindowNode(r.getId(),tw,r);
 				ftwg.addNode(ftwgNode);
 			}
-		}*/
+		}
+		
+		//convert edges to relations between freetimewindows
+		for(Edge e : ftwg.getEdgeMap().values()) {
+			//space feasible because edge
+			FreeTimeWindowNode ftwNodeFrom = (FreeTimeWindowNode)ftwg.getNode(e.getNodeFrom().getId());
+			FreeTimeWindowNode ftwNodeTo = (FreeTimeWindowNode)ftwg.getNode(e.getNodeTo().getId());
+			
+			//check for time feasibility	
+			if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getExitWindow())) {
+				Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo, e.getId(), e.getWeight());
+				ftwg.addEdge(ftwEdge);
+			}
+		}
+		
 		return ftwg;	
     }
 	

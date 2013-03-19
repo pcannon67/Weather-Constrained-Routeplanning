@@ -7,13 +7,13 @@ public class ResourceNode extends Node{
 	
 	private int capacity;
 	private double duration;
-	private boolean[] timeWindow;
+	private int[] timeWindow;
 
 	public ResourceNode(String id,int capacity, double duration, int maxTimeSteps) {
 		super(id);
 		this.capacity = capacity;
 		this.duration = duration;
-		timeWindow = new boolean[maxTimeSteps];
+		timeWindow = new int[maxTimeSteps];
 	}
 
 	public int getCapacity() {
@@ -25,28 +25,12 @@ public class ResourceNode extends Node{
 	}
 	
 	public List<TimeWindow> getFreeTimeWindows() {
-		return getTimeWindows(false);
-	}
-	
-	public List<TimeWindow> getReservedTimeWindows() {
-		return getTimeWindows(true);
-	}
-	
-	public void setTimeWindowReserved(int time) {
-		timeWindow[time] = true;
-	}
-	
-	public void setTimeWindowFree(int time) {
-		timeWindow[time] = false;
-	}
-	
-	private List<TimeWindow> getTimeWindows(boolean reserved) {
 		List<TimeWindow> timeWindows = new ArrayList<TimeWindow>();
 		
 		boolean foundStart=false;
 		int startTime=0;
 		for (int i = 0; i < timeWindow.length; i++) {
-			if(timeWindow[i]==reserved) {
+			if(timeWindow[i] < capacity) {
 				if(!foundStart) { 
 					//we found a new start for a new freetimewindow
 					foundStart = true;
@@ -57,7 +41,11 @@ public class ResourceNode extends Node{
 				if(foundStart)
 				{
 					//we found a start and now we have an end
-					timeWindows.add(new TimeWindow(startTime, i-1));
+					int endTime = i-1;
+					
+					if( (endTime-startTime) >= duration)
+						timeWindows.add(new TimeWindow(startTime, endTime));
+					
 					foundStart = false;
 					startTime = 0;
 				}
@@ -65,5 +53,11 @@ public class ResourceNode extends Node{
 		}
 		
 		return timeWindows;
+	}
+	
+	public void setTimeWindowReserved(TimeWindow tw) {
+		for (int i = tw.getStartTime(); i <= tw.getEndTime(); i++) {
+			timeWindow[i] += 1;
+		}
 	}
 }

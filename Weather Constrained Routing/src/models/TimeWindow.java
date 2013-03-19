@@ -1,5 +1,9 @@
 package models;
 
+import java.util.Random;
+
+import math.MathTools;
+
 public class TimeWindow {
 
 	private int startTime;
@@ -16,5 +20,19 @@ public class TimeWindow {
 
 	public int getEndTime() {
 		return endTime;
+	}
+	
+	public boolean isOverLappingWithTimeWindow(TimeWindow other) {
+		for(int i=startTime ; i <= endTime;i++) {
+			if(i>= other.getStartTime() && i<= other.getEndTime())
+				return true;
+		}
+		return false;
+	}
+	
+	public static TimeWindow generateRandomTimeWindow(int maxTime) {
+		int start = (new Random()).nextInt(maxTime);
+		int end = MathTools.randomInRange(start, maxTime);
+		return new TimeWindow(start, end);
 	}
 }

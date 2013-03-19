@@ -10,7 +10,7 @@ import models.Graph;
 import models.Node;
 import io.GraphReader;
 
-public class TestDijkstraAlgorithm {
+public class TestShortestPathAlgorithms {
 	
 	public static void main(String[] args) {
 		Graph graph = GraphReader.parseGraphFromData("random_10_20_1_10");
