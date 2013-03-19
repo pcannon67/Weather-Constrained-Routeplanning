@@ -22,9 +22,14 @@ public class TestWCRSolvers {
 		Graph graph = GraphReader.parseGraphFromData("random_10_20_1_10");
 		ResourceGraph resourceGraph = GraphTools.convertGraphToResourceGraph(graph);
 		resourceGraph.addRandomWeatherOverlay(GraphConsts.MAX_TIME_STEPS);
+		
+		printTimeWindows(resourceGraph);
+		
 		FreeTimeWindowGraph ftwGraph = GraphTools.convertResourceGraphToFreeTimeWindowGraph(resourceGraph);
 		
-		AstarWCRSolver astar = new AstarWCRSolver();
+		System.out.println(ftwGraph.toStringVerbose());
+		
+		/*AstarWCRSolver astar = new AstarWCRSolver();
 	
 		ResourceNode source = (ResourceNode)GraphTools.getRandomNode(resourceGraph);
 		ResourceNode target = (ResourceNode)GraphTools.getRandomNode(resourceGraph);
@@ -45,6 +50,18 @@ public class TestWCRSolvers {
 		else
 		{
 			System.out.println("NO PATH FOUND");
+		}*/
+	}
+
+	private static void printTimeWindows(ResourceGraph resourceGraph) {
+		for (Node n : resourceGraph.getNodeMap().values()) {
+			ResourceNode rn = (ResourceNode)n;
+			
+			System.out.print(rn.getId() + " ");
+			for (int i = 0; i < rn.getTimeWindow().length; i++) {
+				System.out.print(rn.getTimeWindow()[i] + " ");
+			}
+			System.out.println();
 		}
 	}
 }

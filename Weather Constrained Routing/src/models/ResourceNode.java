@@ -16,6 +16,10 @@ public class ResourceNode extends Node{
 		timeWindow = new int[maxTimeSteps];
 	}
 
+	public int[] getTimeWindow() {
+		return timeWindow;
+	}
+	
 	public int getCapacity() {
 		return capacity;
 	}
@@ -35,6 +39,12 @@ public class ResourceNode extends Node{
 					//we found a new start for a new freetimewindow
 					foundStart = true;
 					startTime = i;
+				}
+				
+				if(i == timeWindow.length-1) {
+					int endTime = i;
+					if( (endTime-startTime) >= duration)
+						timeWindows.add(new TimeWindow(startTime, endTime));
 				}
 			}
 			else {

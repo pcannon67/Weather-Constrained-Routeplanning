@@ -2,7 +2,7 @@ package models;
 
 import math.MathTools;
 
-public class Edge {
+public class Edge implements Comparable<Edge> {
 	
 	private Node nodeFrom;
     private Node nodeTo;
@@ -18,7 +18,11 @@ public class Edge {
         this.weight=weight;
     }
     
-    public String getId() {
+    public Edge(Node nodeFrom, Node nodeTo) {
+    	this(nodeFrom,nodeTo,null,1);
+	}
+
+	public String getId() {
         return id;
     }
     
@@ -53,4 +57,9 @@ public class Edge {
     public String toString() {
         return "Edge id: " + id + " n1: " + nodeFrom.getId() + " n2: " + nodeTo.getId() + " value: " + weight;
     }
+
+	@Override
+	public int compareTo(Edge o) {
+		return id.compareTo(o.getId());
+	}
 }

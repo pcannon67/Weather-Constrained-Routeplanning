@@ -1,5 +1,7 @@
 package tools;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -26,22 +28,38 @@ public class GraphTools {
 		//convert resourcesnodes to freetimewindows
 		for(Node n : resourceGraph.getNodeMap().values()) {
 			ResourceNode r = (ResourceNode) n;
-			for(TimeWindow tw : r.getFreeTimeWindows()) {
-				FreeTimeWindowNode ftwgNode = new FreeTimeWindowNode(r.getId(),tw,r);
+			
+			List<TimeWindow> freeTimeWindows =  r.getFreeTimeWindows();
+			for (int i = 0; i < r.getFreeTimeWindows().size(); i++) {
+				FreeTimeWindowNode ftwgNode = new FreeTimeWindowNode(r.getId()+"_"+i,freeTimeWindows.get(i),r);
 				ftwg.addNode(ftwgNode);
 			}
 		}
 		
 		//convert edges to relations between freetimewindows
-		for(Edge e : ftwg.getEdgeMap().values()) {
-			//space feasible because edge
-			FreeTimeWindowNode ftwNodeFrom = (FreeTimeWindowNode)ftwg.getNode(e.getNodeFrom().getId());
-			FreeTimeWindowNode ftwNodeTo = (FreeTimeWindowNode)ftwg.getNode(e.getNodeTo().getId());
-			
-			//check for time feasibility	
-			if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getExitWindow())) {
-				Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo, e.getId(), e.getWeight());
-				ftwg.addEdge(ftwEdge);
+		for(Node u : ftwg.getNodeMap().values()) {
+			FreeTimeWindowNode ftwNodeFrom = (FreeTimeWindowNode)u;
+			for(Node  n : ftwg.getNodeMap().values()) {
+				FreeTimeWindowNode ftwNodeTo = (FreeTimeWindowNode)n;
+				
+				if(ftwNodeTo == ftwNodeFrom)
+					continue;
+				
+				//check for space feasible i.e. check if there is an edge
+				if(ftwNodeFrom.getResourceNode() != ftwNodeTo.getResourceNode()) {
+					if(resourceGraph.hasEdge(new Edge(ftwNodeFrom.getResourceNode(), ftwNodeTo.getResourceNode()))) {
+						System.out.println(ftwNodeFrom.getResourceNode().getId() + " " + ftwNodeTo.getResourceNode().getId());
+						//check for time feasibility
+						if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getExitWindow())) {
+							Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo);
+							if(!ftwg.hasEdge(ftwEdge))
+								ftwg.addEdge(ftwEdge);
+						}
+					}
+				}
+				else {
+					//TODO: when is it possible to add an edge when time windows in same node?
+				}
 			}
 		}
 		

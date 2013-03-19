@@ -35,4 +35,9 @@ public class TimeWindow {
 		int end = MathTools.randomInRange(start, maxTime);
 		return new TimeWindow(start, end);
 	}
+	
+	@Override
+    public String toString() {
+        return "Timewindow: start: " + startTime + " end: " + endTime;
+    }
 }

@@ -74,6 +74,16 @@ public class Graph {
         return maxDegree;
     }
     
+    public boolean hasEdge(Edge thisEdge) {
+    	for (Edge e : edgeMap.values()) {
+    		//System.out.println(thisEdge.getId() + " " + e.getId() + " " + (e == thisEdge));
+			if(e.getId().equals(thisEdge.getId()))
+				return true;
+		}
+    	
+    	return false;
+    }
+    
     public String getGraphSummary() {
         StringBuffer sb = new StringBuffer();
         sb.append( "Graph Object Summary:\n" );
