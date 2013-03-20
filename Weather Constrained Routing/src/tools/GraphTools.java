@@ -1,6 +1,5 @@
 package tools;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -48,9 +47,8 @@ public class GraphTools {
 				//check for space feasible i.e. check if there is an edge
 				if(ftwNodeFrom.getResourceNode() != ftwNodeTo.getResourceNode()) {
 					if(resourceGraph.hasEdge(new Edge(ftwNodeFrom.getResourceNode(), ftwNodeTo.getResourceNode()))) {
-						System.out.println(ftwNodeFrom.getResourceNode().getId() + " " + ftwNodeTo.getResourceNode().getId());
 						//check for time feasibility
-						if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getExitWindow())) {
+						if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getEntryWindow())) {
 							Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo);
 							if(!ftwg.hasEdge(ftwEdge))
 								ftwg.addEdge(ftwEdge);

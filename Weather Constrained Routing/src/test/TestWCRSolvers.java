@@ -29,13 +29,13 @@ public class TestWCRSolvers {
 		
 		System.out.println(ftwGraph.toStringVerbose());
 		
-		/*AstarWCRSolver astar = new AstarWCRSolver();
+		AstarWCRSolver astar = new AstarWCRSolver();
 	
-		ResourceNode source = (ResourceNode)GraphTools.getRandomNode(resourceGraph);
-		ResourceNode target = (ResourceNode)GraphTools.getRandomNode(resourceGraph);
+		Node source = GraphTools.getRandomNode(graph);
+		Node target = GraphTools.getRandomNode(graph);
 		
 		//double distance = astar.computeShortestDistance(graph,source, target);
-		List<Node> path = astar.computePaths(ftwGraph, source, target, 0);
+		List<Node> path = astar.computePaths(ftwGraph, source, target, 0, GraphConsts.MAX_TIME_STEPS);
 		
 		System.out.println("Calculating from "+source.getId()+" to "+target.getId() + " using Astar algorithm");
 		//System.out.println("Distance from "+source.getId()+" to "+target.getId() + ": "+distance);
@@ -50,7 +50,7 @@ public class TestWCRSolvers {
 		else
 		{
 			System.out.println("NO PATH FOUND");
-		}*/
+		}
 	}
 
 	private static void printTimeWindows(ResourceGraph resourceGraph) {

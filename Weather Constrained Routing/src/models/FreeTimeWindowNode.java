@@ -32,8 +32,7 @@ public class FreeTimeWindowNode extends Node {
 		return timeWindow;
 	}
 
-	public boolean containsTime(int exitTime) {
-		TimeWindow exitTimeWindow = new TimeWindow(exitTime, exitTime);
+	public boolean containsTime(TimeWindow exitTimeWindow) {
 		return exitTimeWindow.isOverLappingWithTimeWindow(getEntryWindow());
 	}
 }
