@@ -5,44 +5,73 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import config.GraphConsts;
+
 import tools.GraphTools;
 
 import models.Edge;
+import models.Graph;
 import models.Node;
 
-public class AstarAlgorithm {
+public class AstarAlgorithm extends AbstractWCRSolver {
 	
 	private Map<Node,Double> fScore;
-	private Map<Node,Double> gScore;
+	private Map<Node,Double> distance;
+	private Map<Node,Double> entryTime;
+	private List<Node> path;
 	
-	public AstarAlgorithm()
-	{ 
+	public AstarAlgorithm(Graph graph)
+	{
+		super(graph);
 		fScore = new HashMap<Node,Double>();
-		gScore = new HashMap<Node,Double>();
+		distance = new HashMap<Node,Double>();
+		entryTime = new HashMap<Node,Double>();
 	}
 	
-	public double computeShortestDistance(Node source, Node target) {
-    	List<Node> path = computePaths(source,target);
-    	if(path != null)
-    		return gScore.get(target);
+	@Override
+	public int pathLengthTo(Node target) {
+		if(path != null)
+			return path.indexOf(target) + 1;
     	else
     		return -1;
-    }
+	}
 	
-	public List<Node> computePaths(Node source,Node target) {
-		
+	@Override
+	public double distanceTo(Node target) {
+    	if(path != null)
+    		return distance.get(target);
+    	else
+    		return -1;
+	}
+
+	@Override
+	public double timeTo(Node target) {
+		if(path != null)
+    		return entryTime.get(target);
+    	else
+    		return -1;
+	}
+	
+	@Override
+	public List<Node> pathTo(Node source, Node target, int startTime, int maxTimeSteps) {
 		List<Node> closedSet = new ArrayList<Node>();
 		List<Node> openSet = new ArrayList<Node>();
 		Map<Node,Node> cameFrom = new HashMap<Node,Node>();
+		distance = new HashMap<Node,Double>();
+		entryTime = new HashMap<Node,Double>();
 		
 		openSet.add(source);
 		
-		gScore.put(source,0.0);
-		fScore.put(source,gScore.get(source)+heuristicCostEstimate(source,target));
+		distance.put(source,0.0);
+		entryTime.put(source,0.0);
+		fScore.put(source,distance.get(source)+heuristicCostEstimate(source,target));
 		
 		while(!openSet.isEmpty()) {
 			Node current = getMinimum(openSet);
-			if(current == target) return reconstructPath(cameFrom,target);
+			if(current == target) {
+				path = reconstructPath(cameFrom,target);
+				return path;
+			}
 			
 			openSet.remove(current);
 			closedSet.add(current);
@@ -50,18 +79,18 @@ public class AstarAlgorithm {
 			for(Edge e : current.getNeighbors())
 			{
 				Node neighbor = GraphTools.getNeighborFromEdge(e, current);
-				double tentativeGScore = gScore.get(current) + e.getWeight();
+				double tentativeGScore = distance.get(current) + e.getWeight();
 				if(closedSet.contains(neighbor)) {
-					if(tentativeGScore >= gScore.get(neighbor))
+					if(tentativeGScore >= distance.get(neighbor))
 						continue;	
 				}
 				
-				if(!openSet.contains(neighbor) || tentativeGScore < gScore.get(neighbor)) {
+				if(!openSet.contains(neighbor) || tentativeGScore < distance.get(neighbor)) {
 					cameFrom.put(neighbor, current);
-					gScore.put(neighbor,tentativeGScore);
-					fScore.put(neighbor,gScore.get(current)+heuristicCostEstimate(neighbor,target));
-					if(!openSet.contains(neighbor))
-						openSet.add(neighbor);
+					distance.put(neighbor,tentativeGScore);
+					entryTime.put(neighbor,tentativeGScore/GraphConsts.VEHICLE_SPEED);
+					fScore.put(neighbor,distance.get(current)+heuristicCostEstimate(neighbor,target));
+					openSet.add(neighbor);
 				}
 			}
 		}

@@ -1,9 +1,11 @@
 package algorithm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
+import config.GraphConsts;
 import config.MathConsts;
 
 import tools.GraphTools;
@@ -12,46 +14,52 @@ import models.Edge;
 import models.Graph;
 import models.Node;
 
-public class DijkstraAlgorithm {
+public class DijkstraAlgorithm extends AbstractWCRSolver {
 	
 	private Map<Node,Node> previous;
 	private Map<Node,Double> distance;
-	private Graph graph;
+	private Map<Node,Double> entryTime;
+	private List<Node> path;
 	
 	public DijkstraAlgorithm(Graph graph)
-	{ 
+	{
+		super(graph);
 		distance = new HashMap<Node, Double>();
+		entryTime = new HashMap<Node, Double>();
 		previous = new HashMap<Node, Node>();
-		this.graph = graph;
 	}
 	
-    public double computeShortestDistance(Node source, Node target) {
-    	computePaths(source);
-        return distance.get(target);
-    }
-    
-    public Stack<Node> computeShortestPath(Node source, Node target) {
-    	Stack<Node> path = new Stack<Node>();
-    	
-    	computePaths(source);
-    	
-    	Node u = target;
-    	while(previous.get(u) != null)
-    	{
-    		path.push(u);
-    		u = previous.get(u);
-    	}
-    	
-    	path.push(source);
-    	
-    	return path;
-    }
+	@Override
+	public int pathLengthTo(Node target) {
+		if(path != null && distance.get(target) != MathConsts.INFINITY) {
+			return path.indexOf(target) + 1;
+		}
+		return -1;
+	}	
 	
-	private void computePaths(Node source)
-    {
+	@Override
+	public double distanceTo(Node target) {
+		if(path != null && distance.get(target) != MathConsts.INFINITY)
+    		return distance.get(target);
+    	else
+    		return -1;
+	}
+
+	@Override
+	public double timeTo(Node target) {
+		if(path != null && entryTime.get(target) != MathConsts.INFINITY)
+    		return entryTime.get(target);
+    	else
+    		return -1;
+	}
+
+	@Override
+	public List<Node> pathTo(Node source, Node target, int startTime,
+			int maxTimeSteps) {
 		for ( Node n : graph.getNodeMap().values())
 		{
 			distance.put(n, MathConsts.INFINITY);
+			entryTime.put(n,0.0);
 			previous.put(n, null);
 		}
 		
@@ -64,6 +72,11 @@ public class DijkstraAlgorithm {
 			Node u = getMinimum(nodes);
 			nodes.remove(u.getId());
 			
+			if(u == target) {
+				path = reconstructPath(previous,u);
+				return path;
+			}
+			
 			if(distance.get(u) == MathConsts.INFINITY) break;
 			
 			for(Edge e : u.getNeighbors())
@@ -73,9 +86,25 @@ public class DijkstraAlgorithm {
 				if(alt < distance.get(neighbor) - MathConsts.EPSILON)
 				{
 					distance.put(neighbor, alt);
+					entryTime.put(neighbor,alt/GraphConsts.VEHICLE_SPEED);
 					previous.put(neighbor, u);
 				}
 			}
+		}
+		
+		return null;
+	}
+	
+	private List<Node> reconstructPath(Map<Node, Node> cameFrom, Node currentNode) {
+    	if(cameFrom.get(currentNode) != null) {
+			List<Node> p = reconstructPath(cameFrom, cameFrom.get(currentNode));
+			p.add(currentNode);
+			return p;
+		}
+		else {
+			List<Node> p = new ArrayList<Node>();
+			p.add(currentNode);
+			return p;
 		}
     }
 	
@@ -88,5 +117,5 @@ public class DijkstraAlgorithm {
 		}
 	    
 	    return min;
-	  }
+	}
 }

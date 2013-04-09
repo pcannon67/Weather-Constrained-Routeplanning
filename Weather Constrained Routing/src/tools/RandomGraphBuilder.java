@@ -16,7 +16,7 @@ public class RandomGraphBuilder extends GraphBuilder{
         if ( edgeCount > maxEdges )
             throw new IllegalArgumentException( "Input edgeCount (" + edgeCount + ") exceeds maximum possible edges for graph with " + nodeCount + " nodes!" );
         // Create empty Graph object
-        Graph g = new Graph();
+        Graph g = new Graph(false);
         // Create temp array to hold node keys - required for getRandomEdge()
         String [] nodeKeys = new String [ nodeCount ];
         // Create and add nodeList
@@ -29,7 +29,8 @@ public class RandomGraphBuilder extends GraphBuilder{
         // Create and add edgeList
         for ( int i = 0; i < edgeCount; ++i ) {
             Edge e = GraphTools.getRandomEdge( rnGen, g, nodeKeys,minWeight,maxWeight);
-            g.addEdge( e );
+            if(!g.hasEdge(e))
+            	g.addEdge( e );
         }
         return g;
     }

@@ -2,6 +2,10 @@ package models;
 
 public class FreeTimeWindowGraph extends Graph {
 
+	public FreeTimeWindowGraph() {
+		super(true); //is a directed graph
+	}
+	
 	public FreeTimeWindowNode getFreeTimeWindowNode(TimeWindow startTimeWindow,
 			Node node) {
 		

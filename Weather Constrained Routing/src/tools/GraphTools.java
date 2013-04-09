@@ -123,7 +123,7 @@ public class GraphTools {
             if ( n1 == n2 ) // Skip if already have edge between these two nodes
                 continue;
             String id = Edge.computeDefaultEdgeId( n1, n2 );
-            if ( g.getEdgeMap().get( id ) != null )
+            if ( g.hasEdge(new Edge(n1,n2)))
                 continue;
             double edgeValue = Edge.generateRandomEdgeValue(minWeight,maxWeight);
             retEdge = new Edge(n1,n2,id,edgeValue);
@@ -146,4 +146,27 @@ public class GraphTools {
         	return null;
         }
     }
+	
+	public static void printTimeWindows(ResourceGraph resourceGraph) {
+			for (Node n : resourceGraph.getNodeMap().values()) {
+				ResourceNode rn = (ResourceNode)n;
+				
+				System.out.print(rn.getId() + " ");
+				for (int i = 0; i < rn.getTimeWindow().length; i++) {
+					System.out.print(rn.getTimeWindow()[i] + " ");
+				}
+				System.out.println();
+			}
+		}
+	
+	public static void printPath(List<Node> path) {
+		if(path!= null && path.size()>0) {
+			for (int i = 0; i < path.size()-1; i++)
+				System.out.print(path.get(i).getId() + "->");
+			System.out.print(path.get(path.size()-1).getId());
+		}
+		else {
+			System.out.print("NO PATH FOUND");
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package io;
 
+import java.io.File;
 import java.io.FileReader;
 import java.util.Scanner;
 
@@ -9,14 +10,14 @@ import models.Node;
 
 public class GraphReader {
 	
-	public static Graph parseGraphFromData(String fileName)
+	public static Graph parseGraphFromData(File file)
 	{
 		//parse graph from file
 		Graph graph =  new Graph();
 		
 	    try 
 	    {
-	    	Scanner inFile = new Scanner(new FileReader(fileName));
+	    	Scanner inFile = new Scanner(new FileReader(file));
 	    	
 	        int nodeCount = inFile.nextInt();
 	        //Create and add nodeList

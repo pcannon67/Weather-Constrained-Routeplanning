@@ -10,14 +10,20 @@ public class Graph {
 	
 	private SortedMap< String, Node > nodeMap = null;
     private Map< String, Edge > edgeMap = null;
+    private boolean directed;
     
     public Graph() {
+        this(false);
+    }
+    
+    public Graph(boolean directed) {
         nodeMap = new TreeMap< String, Node >( new Comparator< String >() {
             public int compare( String s1, String s2 ) {
                 return s1.compareTo( s2 );
             }
         } );
         edgeMap = new HashMap< String, Edge >();
+        this.directed = directed;
     }
 
     public void addNode( Node n ) {
@@ -30,7 +36,9 @@ public class Graph {
         if ( edgeMap.get( e.getId() ) != null ) throw new IllegalStateException( "Attemp to add edge wiith duplicate id <" + e.getId() + ">" );
         edgeMap.put( e.getId(), e );
         e.getNodeFrom().addEdge(e);
-        e.getNodeTo().addEdge(e);
+        if(!directed) {
+        	e.getNodeTo().addEdge(e);
+        }
     }
     
     public Node getNode(String id) {
@@ -57,28 +65,17 @@ public class Graph {
         return edgeMap.size();
     }
     
-    public int countNodesWithDegree( int degree ) {
-        int sum = 0;
-        for ( Node n : nodeMap.values() )
-            if ( n.getDegree() == degree )
-                ++sum;
-        return sum;
-    }
-    
-    public int computeMaxDegree() {
-        int maxDegree = 0;
-        for ( Node n : nodeMap.values() ) {
-            if ( maxDegree < n.getDegree() )
-                maxDegree = n.getDegree();
-        }
-        return maxDegree;
-    }
-    
     public boolean hasEdge(Edge thisEdge) {
+    	String edgeId = Edge.computeBidirectionalEdgeId(thisEdge.getNodeFrom(),thisEdge.getNodeTo());
     	for (Edge e : edgeMap.values()) {
-    		//System.out.println(thisEdge.getId() + " " + e.getId() + " " + (e == thisEdge));
-			if(e.getId().equals(thisEdge.getId()))
-				return true;
+			if(directed) {
+				if(thisEdge.getId().equals(e.getId()))
+					return true;
+			}
+			else {
+				if(edgeId.equals(Edge.computeBidirectionalEdgeId(e.getNodeFrom(), e.getNodeTo())))
+					return true;
+			}
 		}
     	
     	return false;

@@ -31,7 +31,16 @@ public class Edge implements Comparable<Edge> {
             throw new IllegalArgumentException( "Arguments must not be null!" );
         if ( n1 == n2 )
             throw new IllegalArgumentException( "Argument nodes must be for different nodes!" );
-        if ( n1.compareTo( n2 ) < 0 )
+        else
+            return n1.getId() + ":" + n2.getId();
+    }
+    
+    public static String computeBidirectionalEdgeId( Node n1, Node n2 ) {
+        if ( n1 == null || n2 == null )
+            throw new IllegalArgumentException( "Arguments must not be null!" );
+        if ( n1 == n2 )
+            throw new IllegalArgumentException( "Argument nodes must be for different nodes!" );
+        if(n1.getId().compareTo(n2.getId()) < 0)
             return n1.getId() + ":" + n2.getId();
         else
             return n2.getId() + ":" + n1.getId();

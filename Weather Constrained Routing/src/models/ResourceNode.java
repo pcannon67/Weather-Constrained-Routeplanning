@@ -70,4 +70,8 @@ public class ResourceNode extends Node{
 			timeWindow[i] += 1;
 		}
 	}
+
+	public boolean isANode() {
+		return !getId().contains(":");
+	}
 }
