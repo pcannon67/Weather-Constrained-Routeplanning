@@ -2,8 +2,6 @@ package test;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,17 +20,17 @@ import io.GraphReader;
 
 public class TestShortestPathAlgorithms {
 	
-	private static final String DIR = "random_graphs";
+	private static final String DIR = "random_euclidean_graphs";
 	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, AstarAlgorithm.class, AstarWCRSolver.class);
 	private static List<Class<AstarWCRSolver>> wcrClasses = Arrays.asList(AstarWCRSolver.class);
 	
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		runSP(new File(DIR+"/random_5_10_1_100_3"));
-		/*File folder = new File(DIR);
+		//runSP(new File(DIR+"/random_5_10_1_100_3"));
+		File folder = new File(DIR);
 		for (File file : folder.listFiles()) {
 			runSP(file);
-		}*/
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -54,15 +52,15 @@ public class TestShortestPathAlgorithms {
 			AbstractWCRSolver alg  = !wcrClasses.contains(algClass) ? (AbstractWCRSolver) co.newInstance(new Object[]{graph}) : (AbstractWCRSolver) co.newInstance(new Object[]{ftwGraph});
 			
 			List<Node> path = alg.pathTo(source, target, 0, GraphConsts.MAX_TIME_STEPS);
-			double time = alg.timeTo(target);
-			double distance = alg.distanceTo(target);
+			double distance = (int)alg.distanceTo(target);
+			double time = (int)alg.timeTo(target);
 			int pathLength = alg.pathLengthTo(target);
 			
 			System.out.print("\t"+distance);
 			System.out.print("\t"+time);
 			System.out.print("\t"+pathLength);
 			System.out.print("\t");
-			GraphTools.printPath(path);
+			//GraphTools.printPath(path);
 		}
 		
 		System.out.println();

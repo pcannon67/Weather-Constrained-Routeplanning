@@ -20,17 +20,19 @@ public class GraphReader {
 	    	Scanner inFile = new Scanner(new FileReader(file));
 	    	
 	        int nodeCount = inFile.nextInt();
+	        int edgeCount = inFile.nextInt();
+	        
+	        inFile.nextLine();
+	        
 	        //Create and add nodeList
             for ( int i = 0; i < nodeCount; ++i ) {
-                String nodeId = Integer.toString(i);
-                Node n = new Node(nodeId);
+            	String[] line = inFile.nextLine().split(" ");
+                Node n = new Node(line[0],Double.parseDouble(line[1]),Double.parseDouble(line[2]));
                 graph.addNode(n);
             }
             
-            inFile.nextLine();
-            
             //Create and add edgeList
-	        while (inFile.hasNextLine()) {
+            for ( int i = 0; i < edgeCount; ++i ) {
 	            String[] line = inFile.nextLine().split(" ");
 	            
 	            Node nodeFrom = graph.getNode(line[0]);

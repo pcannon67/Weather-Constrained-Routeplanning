@@ -5,6 +5,7 @@ import java.io.FileWriter;
 
 import models.Edge;
 import models.Graph;
+import models.Node;
 
 public class GraphWriter {
 	
@@ -17,6 +18,11 @@ public class GraphWriter {
 			BufferedWriter out = new BufferedWriter(fstream);
 		  
 			out.write(g.getNodeCount() +  "\n");
+			out.write(g.getEdgeCount() +  "\n");
+			
+			for ( Node n : g.getNodeMap().values())
+				out.write(n.getId() + " " + n.getX() + " " + n.getY() + "\n");
+			
 			for ( Edge e : g.getEdgeMap().values())
 				out.write(e.getNodeFrom().getId() + " " + e.getNodeTo().getId() + " " + e.getWeight() + "\n");
 			

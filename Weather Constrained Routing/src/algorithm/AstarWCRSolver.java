@@ -8,6 +8,7 @@ import java.util.Map;
 import config.GraphConsts;
 import config.MathConsts;
 
+import math.MathTools;
 import models.Edge;
 import models.FreeTimeWindowGraph;
 import models.FreeTimeWindowNode;
@@ -93,6 +94,7 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 		{
 			FreeTimeWindowNode current = getMinimum(openSet,fScore);
 			ResourceNode r = current.getResourceNode();
+			
 			if (r.getId().equals(target.getId())) {
 				path = reconstructPath(cameFrom, current);
 				return path;
@@ -105,7 +107,7 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 			
 			for (Edge e : current.getNeighbors()) {
 				FreeTimeWindowNode neighbor = (FreeTimeWindowNode)GraphTools.getNeighborFromEdge(e, current);
-				if(!openSet.contains(neighbor) && neighbor.containsTime(new TimeWindow(exitTime, current.getTimeWindow().getEndTime())))
+				if(neighbor.containsTime(new TimeWindow(exitTime, current.getTimeWindow().getEndTime())))
 				{
 					int enterTime = Math.max(exitTime, neighbor.getTimeWindow().getStartTime());
 					int neighborEntryTime = entryTime.get(neighbor) != null ? entryTime.get(neighbor) : (int)MathConsts.INFINITY;
@@ -149,7 +151,6 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 	  }
 
 	private double heuristicCostEstimate(Node source, Node target) {
-		// TODO Euclidian distance
-		return 0.0;
+		return MathTools.euclideanDistance(source.getX(),source.getY(), target.getX(), target.getY());
 	}
 }

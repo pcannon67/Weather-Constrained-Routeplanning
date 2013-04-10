@@ -9,6 +9,7 @@ import config.GraphConsts;
 
 import tools.GraphTools;
 
+import math.MathTools;
 import models.Edge;
 import models.Graph;
 import models.Node;
@@ -68,6 +69,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 		
 		while(!openSet.isEmpty()) {
 			Node current = getMinimum(openSet);
+			
 			if(current == target) {
 				path = reconstructPath(cameFrom,target);
 				return path;
@@ -89,7 +91,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 					cameFrom.put(neighbor, current);
 					distance.put(neighbor,tentativeGScore);
 					entryTime.put(neighbor,tentativeGScore/GraphConsts.VEHICLE_SPEED);
-					fScore.put(neighbor,distance.get(current)+heuristicCostEstimate(neighbor,target));
+					fScore.put(neighbor,distance.get(neighbor)+heuristicCostEstimate(neighbor,target));
 					openSet.add(neighbor);
 				}
 			}
@@ -123,7 +125,6 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 	  }
 
 	private double heuristicCostEstimate(Node source, Node target) {
-		// TODO Auto-generated method stub
-		return 0.0;
+		return MathTools.euclideanDistance(source.getX(),source.getY(), target.getX(), target.getY());
 	}
 }
