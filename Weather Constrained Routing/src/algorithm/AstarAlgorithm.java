@@ -24,9 +24,6 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 	public AstarAlgorithm(Graph graph)
 	{
 		super(graph);
-		fScore = new HashMap<Node,Double>();
-		distance = new HashMap<Node,Double>();
-		entryTime = new HashMap<Node,Double>();
 	}
 	
 	@Override
@@ -34,7 +31,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 		if(path != null)
 			return path.indexOf(target) + 1;
     	else
-    		return -1;
+    		return 0;
 	}
 	
 	@Override
@@ -42,7 +39,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
     	if(path != null)
     		return distance.get(target);
     	else
-    		return -1;
+    		return 0;
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 		if(path != null)
     		return entryTime.get(target);
     	else
-    		return -1;
+    		return 0;
 	}
 	
 	@Override
@@ -58,6 +55,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 		List<Node> closedSet = new ArrayList<Node>();
 		List<Node> openSet = new ArrayList<Node>();
 		Map<Node,Node> cameFrom = new HashMap<Node,Node>();
+		fScore = new HashMap<Node,Double>();
 		distance = new HashMap<Node,Double>();
 		entryTime = new HashMap<Node,Double>();
 		
@@ -125,6 +123,6 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 	  }
 
 	private double heuristicCostEstimate(Node source, Node target) {
-		return MathTools.euclideanDistance(source.getX(),source.getY(), target.getX(), target.getY());
+		return 0.0;
 	}
 }

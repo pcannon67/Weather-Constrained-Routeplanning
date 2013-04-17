@@ -27,8 +27,6 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 	public AstarWCRSolver(Graph graph)
 	{ 
 		super(graph);
-		entryTime = new HashMap<FreeTimeWindowNode,Integer>();
-		distance = new HashMap<FreeTimeWindowNode,Double>();
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 			}
     	}
     	
-    	return -1;
+    	return 0;
 	}
 	
 	@Override
@@ -54,7 +52,7 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 			}
     	}
     	
-    	return -1;
+    	return 0;
 	}
 	
 	@Override
@@ -66,7 +64,7 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 			}
     	}
     	
-    	return -1;
+    	return 0;
 	}
 
 	@Override

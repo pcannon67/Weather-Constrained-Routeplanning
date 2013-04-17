@@ -21,4 +21,47 @@ public class MathTools {
 	public static double euclideanDistance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt(Math.pow((x1-x2),2) - Math.pow((y1-y2),2));
 	}
+	
+	public static int avg(int[] arr) {
+		int result=0;
+		int count=0;
+		for(int i=0; i < arr.length; i++) {
+			result=result + arr[i];
+			if(arr[i]>0)
+				count++;
+		}
+		if(count>0)
+			return result/count;
+		else
+			return 0;
+	}
+	
+	public static long avg(long[] arr) {
+		long result=0;
+		int count=0;
+		for(int i=0; i < arr.length; i++) {
+			result=result + arr[i];
+			if(arr[i]>0)
+				count++;
+		}
+		if(count>0)
+			return result/count;
+		else
+			return 0;
+	}
+	
+	public static double avg(double[] arr) {
+		double result=0;
+		int count=0;
+		for(int i=0; i < arr.length; i++) {
+			result=result + arr[i];
+			if(arr[i]>0)
+				count++;
+		}
+		
+		if(count>0)
+			return result/count;
+		else
+			return 0;
+	}
 }

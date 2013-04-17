@@ -24,9 +24,6 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 	public DijkstraAlgorithm(Graph graph)
 	{
 		super(graph);
-		distance = new HashMap<Node, Double>();
-		entryTime = new HashMap<Node, Double>();
-		previous = new HashMap<Node, Node>();
 	}
 	
 	@Override
@@ -34,7 +31,7 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 		if(path != null && distance.get(target) != MathConsts.INFINITY) {
 			return path.indexOf(target) + 1;
 		}
-		return -1;
+		return 0;
 	}	
 	
 	@Override
@@ -42,7 +39,7 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 		if(path != null && distance.get(target) != MathConsts.INFINITY)
     		return distance.get(target);
     	else
-    		return -1;
+    		return 0;
 	}
 
 	@Override
@@ -50,14 +47,17 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 		if(path != null && entryTime.get(target) != MathConsts.INFINITY)
     		return entryTime.get(target);
     	else
-    		return -1;
+    		return 0;
 	}
 
 	@Override
 	public List<Node> pathTo(Node source, Node target, int startTime,
 			int maxTimeSteps) {
-		for ( Node n : graph.getNodeMap().values())
-		{
+		distance = new HashMap<Node, Double>();
+		entryTime = new HashMap<Node, Double>();
+		previous = new HashMap<Node, Node>();
+		
+		for ( Node n : graph.getNodeMap().values()) {
 			distance.put(n, MathConsts.INFINITY);
 			entryTime.put(n,0.0);
 			previous.put(n, null);
@@ -65,7 +65,7 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 		
 		distance.put(source, 0.0);
 		
-		Map<String, Node> nodes = graph.getNodeMap();
+		Map<String, Node> nodes = new HashMap<String, Node>(graph.getNodeMap());
 		
 		while(!nodes.isEmpty())
 		{
@@ -79,12 +79,11 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 			
 			if(distance.get(u) == MathConsts.INFINITY) break;
 			
-			for(Edge e : u.getNeighbors())
-			{
+			for(Edge e : u.getNeighbors()) {
 				Node neighbor = GraphTools.getNeighborFromEdge(e, u);
 				double alt = distance.get(u) + e.getWeight();
-				if(alt < distance.get(neighbor) - MathConsts.EPSILON)
-				{
+				double neighborEntryTime = distance.get(neighbor) != null ? distance.get(neighbor) : MathConsts.INFINITY;
+				if(alt < neighborEntryTime - MathConsts.EPSILON) {
 					distance.put(neighbor, alt);
 					entryTime.put(neighbor,alt/GraphConsts.VEHICLE_SPEED);
 					previous.put(neighbor, u);

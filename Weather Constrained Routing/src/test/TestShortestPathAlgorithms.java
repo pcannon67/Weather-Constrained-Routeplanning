@@ -12,6 +12,7 @@ import algorithm.AbstractWCRSolver;
 import algorithm.AstarAlgorithm;
 import algorithm.AstarWCRSolver;
 import algorithm.DijkstraAlgorithm;
+import math.MathTools;
 import models.FreeTimeWindowGraph;
 import models.Graph;
 import models.Node;
@@ -20,13 +21,14 @@ import io.GraphReader;
 
 public class TestShortestPathAlgorithms {
 	
+	//private static final String DIR = "small_graphs";
 	private static final String DIR = "random_euclidean_graphs";
 	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, AstarAlgorithm.class, AstarWCRSolver.class);
 	private static List<Class<AstarWCRSolver>> wcrClasses = Arrays.asList(AstarWCRSolver.class);
 	
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		//runSP(new File(DIR+"/random_5_10_1_100_3"));
+		//runSP(new File(DIR+"/random_euclidean_35_25.0_100_100_4"));
 		File folder = new File(DIR);
 		for (File file : folder.listFiles()) {
 			runSP(file);
@@ -43,26 +45,47 @@ public class TestShortestPathAlgorithms {
 		//resourceGraph.addRandomWeatherOverlay(GraphConsts.MAX_TIME_STEPS);
 		FreeTimeWindowGraph ftwGraph = GraphTools.convertResourceGraphToFreeTimeWindowGraph(resourceGraph);
 		
-		Node source = GraphTools.getRandomNode(graph);
-		Node target = GraphTools.getRandomNode(graph);
+		System.out.print(file.getName()+ "\t" + graph.getNodeCount() + "\t" + graph.getEdgeCount());
 		
-		System.out.print(file.getName()+"("+source.getId()+"->"+target.getId()+")");
-		for (Class<? extends AbstractWCRSolver> algClass : algClasses) {
-			java.lang.reflect.Constructor co = algClass.getConstructor(new Class[] {Graph.class});
-			AbstractWCRSolver alg  = !wcrClasses.contains(algClass) ? (AbstractWCRSolver) co.newInstance(new Object[]{graph}) : (AbstractWCRSolver) co.newInstance(new Object[]{ftwGraph});
+		int runs = 10;
+		double[][] distance = new double[algClasses.size()][runs];
+		int[][] pathLength = new int[algClasses.size()][runs];
+		long[][] estimatedTime = new long[algClasses.size()][runs];
+		
+		for (int i = 0; i < runs; i++) {
 			
-			List<Node> path = alg.pathTo(source, target, 0, GraphConsts.MAX_TIME_STEPS);
-			double distance = (int)alg.distanceTo(target);
-			double time = (int)alg.timeTo(target);
-			int pathLength = alg.pathLengthTo(target);
+			Node source = GraphTools.getRandomNode(graph);
+			Node target = GraphTools.getRandomNode(graph);
 			
-			System.out.print("\t"+distance);
-			System.out.print("\t"+time);
-			System.out.print("\t"+pathLength);
+			int count = 0;
+			for (Class<? extends AbstractWCRSolver> algClass : algClasses) {
+				java.lang.reflect.Constructor co = algClass.getConstructor(new Class[] {Graph.class});
+				AbstractWCRSolver alg  = !wcrClasses.contains(algClass) ? (AbstractWCRSolver) co.newInstance(new Object[]{graph}) : (AbstractWCRSolver) co.newInstance(new Object[]{ftwGraph});
+				
+				long startTime = System.nanoTime();
+				List<Node> path = alg.pathTo(source, target, 0, GraphConsts.MAX_TIME_STEPS);
+				estimatedTime[count][i] = System.nanoTime() - startTime;
+				
+				distance[count][i] = (int)alg.distanceTo(target);
+				pathLength[count][i] = alg.pathLengthTo(target);
+				//double time = (int)alg.timeTo(target);
+				
+				count++;
+			}
+		}
+		
+		for (int j = 0; j < algClasses.size(); j++) {
+			System.out.print("\t"+(int)MathTools.avg(distance[j]));
+			//System.out.print("\t"+time);
+			System.out.print("\t"+(int)MathTools.avg(pathLength[j]));
+			System.out.print("\t"+((int)MathTools.avg(pathLength[j])-1));
+			System.out.print("\t"+MathTools.avg(estimatedTime[j]));
 			System.out.print("\t");
 			//GraphTools.printPath(path);
 		}
 		
 		System.out.println();
 	}
+	
+	
 }

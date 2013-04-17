@@ -19,16 +19,16 @@ public class TestGraphGenerator {
 	private static final double DENSITY = BOX_WIDTH*0.25;
 	
 	
-	private static final String RANDOM_GRAPHS_DIR = "random_graphs";
+	private static final String SMALL_GRAPHS_DIR = "small_graphs";
 	private static final String RANDOM_EUCLIDEAN_GRAPHS_DIR = "random_euclidean_graphs";
 
 	public static void main(String[] args) {
 		
-		generateRandomEuclideanGraphs();
+		generateRandomEuclideanGraphs(SMALL_GRAPHS_DIR);
 		//generateRandomGraphs();
 	}
 
-	private static void generateRandomEuclideanGraphs() {
+	private static void generateRandomEuclideanGraphs(String dir) {
 		for (int j = 1; j <= 10; j++) {
 			int nof_nodes = j*NUMBER_OF_NODES;
 			
@@ -37,14 +37,14 @@ public class TestGraphGenerator {
 			for(int i = 0; i < NUMBER_OF_GRAPHS_TO_GENERATE; i++)
 			{
 				Graph g = GraphBuilder.createRandomEuclideanGraph(nof_nodes, DENSITY, BOX_WIDTH, BOX_HEIGHT);
-				GraphWriter.writeGraphToFile(g, RANDOM_EUCLIDEAN_GRAPHS_DIR+"/random_euclidean_"+g.getNodeCount()+"_"+DENSITY+"_"+BOX_WIDTH+"_"+BOX_HEIGHT+"_"+(i+1));
+				GraphWriter.writeGraphToFile(g, dir+"/random_euclidean_"+g.getNodeCount()+"_"+DENSITY+"_"+BOX_WIDTH+"_"+BOX_HEIGHT+"_"+(i+1));
 			}
 			
 			System.out.println("DONE");
 		}
 	}
 	
-	private static void generateRandomGraphs() {
+	private static void generateRandomGraphs(String dir) {
 		for (int j = 1; j <= 10; j++) {
 			
 			int nof_nodes = j*NUMBER_OF_NODES;
@@ -55,7 +55,7 @@ public class TestGraphGenerator {
 			for(int i = 0; i < NUMBER_OF_GRAPHS_TO_GENERATE; i++)
 			{
 				Graph g = GraphBuilder.createRandomGraph(nof_nodes, nof_edges, MIN_EDGE_VALUE, MAX_EDGE_VALUE);
-				GraphWriter.writeGraphToFile(g, RANDOM_GRAPHS_DIR+"/random_"+g.getNodeCount()+"_"+g.getEdgeCount()+"_"+MIN_EDGE_VALUE+"_"+MAX_EDGE_VALUE+"_"+(i+1));
+				GraphWriter.writeGraphToFile(g, dir+"/random_"+g.getNodeCount()+"_"+g.getEdgeCount()+"_"+MIN_EDGE_VALUE+"_"+MAX_EDGE_VALUE+"_"+(i+1));
 			}
 			
 			System.out.println("DONE");
