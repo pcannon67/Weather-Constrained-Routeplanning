@@ -21,15 +21,17 @@ import io.GraphReader;
 
 public class TestShortestPathAlgorithms {
 	
-	//private static final String DIR = "small_graphs";
-	private static final String DIR = "random_euclidean_graphs";
+	private static final String DIR = "datasets";
+	private static final String SMALL_GRAPH_DIR = "small_graphs";
+	private static final String LARGE_GRAPH_DIR = "large_graphs";
+	//private static final String DIR = "random_euclidean_graphs";
 	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, AstarAlgorithm.class, AstarWCRSolver.class);
 	private static List<Class<AstarWCRSolver>> wcrClasses = Arrays.asList(AstarWCRSolver.class);
 	
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		//runSP(new File(DIR+"/random_euclidean_35_25.0_100_100_4"));
-		File folder = new File(DIR);
+		File folder = new File(DIR+"/"+LARGE_GRAPH_DIR);
 		for (File file : folder.listFiles()) {
 			runSP(file);
 		}
@@ -39,12 +41,12 @@ public class TestShortestPathAlgorithms {
 	private static void runSP(File file) throws NoSuchMethodException,
 			InstantiationException, IllegalAccessException,
 			InvocationTargetException {
+		
 		Graph graph = GraphReader.parseGraphFromData(file);
 		
 		ResourceGraph resourceGraph = GraphTools.convertGraphToResourceGraph(graph);
 		//resourceGraph.addRandomWeatherOverlay(GraphConsts.MAX_TIME_STEPS);
 		FreeTimeWindowGraph ftwGraph = GraphTools.convertResourceGraphToFreeTimeWindowGraph(resourceGraph);
-		
 		System.out.print(file.getName()+ "\t" + graph.getNodeCount() + "\t" + graph.getEdgeCount());
 		
 		int runs = 10;

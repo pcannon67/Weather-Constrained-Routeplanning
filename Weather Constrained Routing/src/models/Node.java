@@ -24,7 +24,11 @@ public class Node implements Comparable<Node> {
         neighbors = new ArrayList<Edge>();
     }
     
-    public String getId() {
+    public Node(int i) {
+		this(Integer.toString(i));
+	}
+
+	public String getId() {
         return id;
     }
     

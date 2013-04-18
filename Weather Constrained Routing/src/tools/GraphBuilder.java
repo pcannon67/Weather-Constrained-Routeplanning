@@ -19,15 +19,18 @@ public class GraphBuilder {
             String nodeId = Integer.toString( g.getNodeCount() );
             Node n = new Node(nodeId, (int)(Math.random()*width), (int)(Math.random()*height));
             g.addNode( n );
+            //System.out.println(n.getId());
         }
         
         for (Node n : g.getNodeMap().values()) {
             for (Node u : g.getNodeMap().values()) {
-            	if(u == n) continue;
+            	//System.out.println(u.getId());
+            	if(u==n) continue;
             	if (Node.distanceTo(n,u) < density) {
             		Edge e = new Edge(n,u,null,(int)(Node.distanceTo(n,u)));
-                    if(!g.hasEdge(e))
+					//if(!g.hasEdge(e)) 
                     	g.addEdge( e );
+					//}
                }
             }
          }

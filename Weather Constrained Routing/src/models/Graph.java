@@ -1,7 +1,9 @@
 package models;
 
+
+import gnu.trove.map.hash.THashMap;
+
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -9,7 +11,7 @@ import java.util.TreeMap;
 public class Graph {
 	
 	private SortedMap< String, Node > nodeMap = null;
-    private Map< String, Edge > edgeMap = null;
+    private THashMap< String, Edge > edgeMap = null;
     private boolean directed;
     
     public Graph() {
@@ -22,7 +24,7 @@ public class Graph {
                 return s1.compareTo( s2 );
             }
         } );
-        edgeMap = new HashMap< String, Edge >();
+        edgeMap = new THashMap< String, Edge >();
         this.directed = directed;
     }
 
@@ -34,13 +36,13 @@ public class Graph {
     
     public void addEdge( Edge e ) {
         if ( edgeMap.get( e.getId() ) != null ) throw new IllegalStateException( "Attemp to add edge wiith duplicate id <" + e.getId() + ">" );
-        edgeMap.put( e.getId(), e );
+        edgeMap.put( e.getId(), e);
         e.getNodeFrom().addEdge(e);
         if(!directed) {
         	e.getNodeTo().addEdge(e);
         }
     }
-    
+    	
     public Node getNode(String id) {
         return nodeMap.get(id);
     }

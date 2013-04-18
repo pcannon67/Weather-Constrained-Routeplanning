@@ -50,7 +50,7 @@ public class GraphTools {
 						//check for time feasibility
 						if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getEntryWindow())) {
 							Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo);
-							if(!ftwg.hasEdge(ftwEdge))
+							//if(!ftwg.hasEdge(ftwEdge))
 								ftwg.addEdge(ftwEdge);
 						}
 					}
