@@ -14,7 +14,7 @@ public class TestGraphGenerator {
 
 	private static final int NUMBER_OF_GRAPHS_TO_GENERATE = 1;
 	
-	private static final int NUMBER_OF_NODES = 20;
+	private static final int NUMBER_OF_NODES = 10;
 	
 	private static final int NUMBER_OF_EDGES = 2*NUMBER_OF_NODES;
 	private static final int MIN_EDGE_VALUE = 1;
@@ -31,7 +31,7 @@ public class TestGraphGenerator {
 	private static final String RANDOM_EUCLIDEAN_GRAPHS_DIR = "random_euclidean_graphs";
 
 	public static void main(String[] args) {
-		generateRandomEuclideanGraphs(DATASET_DIR+"/"+SMALL_GRAPHS_DIR);
+		generateRandomEuclideanGraphs("");
 		//generateRandomGraphs();
 	}
 
@@ -44,7 +44,7 @@ public class TestGraphGenerator {
 			for(int i = 0; i < NUMBER_OF_GRAPHS_TO_GENERATE; i++)
 			{
 				Graph g = GraphBuilder.createRandomEuclideanGraph(nof_nodes, DENSITY, BOX_WIDTH, BOX_HEIGHT);
-				GraphWriter.writeGraphToFile(g, dir+"/random_euclidean_"+g.getNodeCount()+"_"+DENSITY+"_"+BOX_WIDTH+"_"+BOX_HEIGHT+"_"+(i+1));
+				GraphWriter.writeGraphToFile(g, dir+"random_euclidean_"+g.getNodeCount()+"_"+DENSITY+"_"+BOX_WIDTH+"_"+BOX_HEIGHT+"_"+(i+1));
 			}
 			
 			System.out.println("DONE");

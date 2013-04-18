@@ -68,7 +68,7 @@ public class Graph {
     }
     
     public boolean hasEdge(Edge thisEdge) {
-    	String edgeId = Edge.computeBidirectionalEdgeId(thisEdge.getNodeFrom(),thisEdge.getNodeTo());
+    	/*String edgeId = Edge.computeBidirectionalEdgeId(thisEdge.getNodeFrom(),thisEdge.getNodeTo());
     	for (Edge e : edgeMap.values()) {
 			if(directed) {
 				if(thisEdge.getId().equals(e.getId()))
@@ -78,9 +78,9 @@ public class Graph {
 				if(edgeId.equals(Edge.computeBidirectionalEdgeId(e.getNodeFrom(), e.getNodeTo())))
 					return true;
 			}
-		}
+		}*/
     	
-    	return false;
+    	return  edgeMap.get(thisEdge.getId())!=null;
     }
     
     public String getGraphSummary() {
