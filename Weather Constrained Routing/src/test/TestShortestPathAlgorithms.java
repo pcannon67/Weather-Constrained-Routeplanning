@@ -31,7 +31,7 @@ public class TestShortestPathAlgorithms {
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		//runSP(new File(DIR+"/random_euclidean_35_25.0_100_100_4"));
-		File folder = new File(DIR+"/"+LARGE_GRAPH_DIR);
+		File folder = new File("graphs");
 		for (File file : folder.listFiles()) {
 			runSP(file);
 		}
