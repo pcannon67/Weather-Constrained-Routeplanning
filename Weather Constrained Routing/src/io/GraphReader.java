@@ -21,27 +21,18 @@ public class GraphReader {
 	    	
 	        int nodeCount = inFile.nextInt();
 	        int edgeCount = inFile.nextInt();
-	        
 	        inFile.nextLine();
 	        
 	        //Create and add nodeList
             for ( int i = 0; i < nodeCount; ++i ) {
             	String[] line = inFile.nextLine().split(" ");
-                Node n = new Node(line[0],Double.parseDouble(line[1]),Double.parseDouble(line[2]));
-                graph.addNode(n);
+                graph.addNode(line[0],Double.parseDouble(line[1]),Double.parseDouble(line[2]));
             }
             
             //Create and add edgeList
             for ( int i = 0; i < edgeCount; ++i ) {
 	            String[] line = inFile.nextLine().split(" ");
-	            
-	            Node nodeFrom = graph.getNode(line[0]);
-	            Node nodeTo = graph.getNode(line[1]);
-	            double edgeValue = Double.parseDouble(line[2]);
-	            String id = Edge.computeDefaultEdgeId(nodeFrom, nodeTo);
-	            
-	            Edge e = new Edge(nodeFrom, nodeTo, id, edgeValue);
-                graph.addEdge(e);
+                graph.addEdge(line[0],line[1],Double.parseDouble(line[2]));
 	        }
 	     
 	        inFile.close();

@@ -20,10 +20,10 @@ public class GraphWriter {
 			out.write(g.getNodeCount() +  "\n");
 			out.write(g.getEdgeCount() +  "\n");
 			
-			for ( Node n : g.getNodeMap().values())
+			for ( Node n : g.getNodeMap())
 				out.write(n.getId() + " " + n.getX() + " " + n.getY() + "\n");
 			
-			for ( Edge e : g.getEdgeMap().values())
+			for ( Edge e : g.getEdgeMap())
 				out.write(e.getNodeFrom().getId() + " " + e.getNodeTo().getId() + " " + e.getWeight() + "\n");
 			
 			//Close the output stream

@@ -2,14 +2,11 @@ package models;
 
 public class FreeTimeWindowGraph extends Graph {
 
-	public FreeTimeWindowGraph() {
-		super(true); //is a directed graph
-	}
 	
 	public FreeTimeWindowNode getFreeTimeWindowNode(TimeWindow startTimeWindow,
 			Node node) {
 		
-		for (Node n : getNodeMap().values()) {
+		for (Node n : getNodeMap()) {
 			FreeTimeWindowNode fn = (FreeTimeWindowNode) n;
 			
 			if(startTimeWindow.isOverLappingWithTimeWindow(fn.getEntryWindow()) && 
@@ -19,5 +16,4 @@ public class FreeTimeWindowGraph extends Graph {
 		}
 		return null;
 	}
-
 }

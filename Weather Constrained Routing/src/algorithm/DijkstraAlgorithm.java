@@ -57,20 +57,16 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 		entryTime = new HashMap<Node, Double>();
 		previous = new HashMap<Node, Node>();
 		
-		for ( Node n : graph.getNodeMap().values()) {
-			distance.put(n, MathConsts.INFINITY);
-			entryTime.put(n,0.0);
-			previous.put(n, null);
-		}
-		
 		distance.put(source, 0.0);
+		previous.put(source, null);
 		
-		Map<String, Node> nodes = new HashMap<String, Node>(graph.getNodeMap());
+		List<Node> nodes = new ArrayList<Node>();
+		nodes.add(source);
 		
 		while(!nodes.isEmpty())
 		{
 			Node u = getMinimum(nodes);
-			nodes.remove(u.getId());
+			nodes.remove(u);
 			
 			if(u == target) {
 				path = reconstructPath(previous,u);
@@ -87,6 +83,7 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 					distance.put(neighbor, alt);
 					entryTime.put(neighbor,alt/GraphConsts.VEHICLE_SPEED);
 					previous.put(neighbor, u);
+					nodes.add(neighbor);
 				}
 			}
 		}
@@ -107,9 +104,9 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 		}
     }
 	
-	private Node getMinimum(Map<String,Node> nodes) {
+	private Node getMinimum(List<Node> nodes) {
 		Node min = null;
-		for (Node node : nodes.values()) {
+		for (Node node : nodes) {
 			if(min == null || distance.get(node) < distance.get(min)) {
 				min = node;
 			}

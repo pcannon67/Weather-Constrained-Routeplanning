@@ -1,5 +1,168 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+
+public class Graph {
+	public List<Node> nodes;
+	public List<Edge> edges;
+	
+	public Graph() {
+		nodes = new ArrayList<Node>();
+		edges = new ArrayList<Edge>();		
+	}
+	
+	public void addNode(Node n)  {
+        nodes.add(n);
+    }
+	
+    public void addNode(String id, double x, double y)  {
+    	addNode(new Node(id, x, y));
+    }
+
+    public void addEdge(Edge e) {
+    	addEdge(e.getNodeFrom(), e.getNodeTo(), e.getWeight());
+    }
+    
+    public void addEdge(String n1, String n2, double weight) {
+    	Node source = getNode(n1);
+    	Node target = getNode(n2);
+    	addEdge(source, target, weight);
+    }
+    
+    public void addEdge(Node source, Node target, double weight) {
+    	Edge e = new Edge(source,target,weight);
+    	source.addEdge(e);
+        edges.add(e);
+    }
+    
+    public Node getNode(String id) {
+    	for (Node n : nodes) {
+			if(n.getId().equals(id))
+				return n;
+		}
+    	return null;
+    }
+
+	public int getNodeCount() {
+		return nodes.size();
+	}
+	
+	public int getEdgeCount() {
+		return edges.size();
+	}
+
+	public List<Node> getNodeMap() {
+		return nodes;
+	}
+	
+	public List<Edge> getEdgeMap() {
+		return edges;
+	}
+	
+	public boolean containsEdge(Edge edge) {
+		return edges.contains(edge);
+	}
+	
+	public String toStringVerbose() {
+        StringBuffer sb = new StringBuffer();
+        sb.append( "Graph Object Dump:\n" );
+        sb.append( "\tNode Count: " + getNodeCount() + "\n" );
+        sb.append( "\tEdge Count: "  + getEdgeCount() + "\n" );
+        sb.append( "\tNodes: \n" );
+        int nodeIndex = 0;
+        for ( Node n : nodes )
+            sb.append( "\t\tNode[ " + nodeIndex++ + " ]: " + n.toString() + "\n" );
+        sb.append( "\tEdges: \n" );
+        int edgeIndex = 0;
+        for ( Edge e : edges )
+            sb.append( "\t\tEdge[ " + edgeIndex++ + " ]: " + e.toString() + "\n" );
+        return sb.toString();
+    }
+}
+
+/*public class Graph {
+	
+	public DefaultDirectedWeightedGraph<Node, Edge> g;
+
+	public Graph() {
+		g = new DefaultDirectedWeightedGraph<Node, Edge>(Edge.class);
+	}
+	
+	public void addNode(Node n)  {
+        g.addVertex(n);
+    }
+	
+    public void addNode(String id, double x, double y)  {
+        g.addVertex(new Node(id, x, y));
+    }
+
+    public void addEdge(Edge e) {
+    	addEdge(e.getNodeFrom(), e.getNodeTo(), e.getWeight());
+    }
+    
+    public void addEdge(String n1, String n2, double weight) {
+    	Node source = getNode(n1);
+    	Node target = getNode(n2);
+    	addEdge(source, target, weight);
+    }
+    
+    public void addEdge(Node source, Node target, double weight) {
+    	Edge e = new Edge(source,target,weight);
+    	source.addEdge(e);
+        g.addEdge(source,target,e);
+    }
+    
+    public Node getNode(String id) {
+    	for (Node n : g.vertexSet()) {
+			if(n.getId().equals(id))
+				return n;
+		}
+    	return null;
+    }
+
+	public int getNodeCount() {
+		return g.vertexSet().size();
+	}
+	
+	public int getEdgeCount() {
+		return g.edgeSet().size();
+	}
+
+	public Set<Node> getNodeMap() {
+		return g.vertexSet();
+	}
+	
+	public Set<Edge> getEdgeMap() {
+		return g.edgeSet();
+	}
+	
+	public boolean containsEdge(Edge edge) {
+		return g.containsEdge(edge);
+	}
+	
+	public String toStringVerbose() {
+        StringBuffer sb = new StringBuffer();
+        sb.append( "Graph Object Dump:\n" );
+        sb.append( "\tNode Count: " + getNodeCount() + "\n" );
+        sb.append( "\tEdge Count: "  + getEdgeCount() + "\n" );
+        sb.append( "\tNodes: \n" );
+        int nodeIndex = 0;
+        for ( Node n : g.vertexSet() )
+            sb.append( "\t\tNode[ " + nodeIndex++ + " ]: " + n.toString() + "\n" );
+        sb.append( "\tEdges: \n" );
+        int edgeIndex = 0;
+        for ( Edge e : g.edgeSet() )
+            sb.append( "\t\tEdge[ " + edgeIndex++ + " ]: " + e.toString() + "\n" );
+        return sb.toString();
+    }
+}*/
+
+/*package models;
+
 
 import gnu.trove.map.hash.THashMap;
 
@@ -68,7 +231,7 @@ public class Graph {
     }
     
     public boolean hasEdge(Edge thisEdge) {
-    	/*String edgeId = Edge.computeBidirectionalEdgeId(thisEdge.getNodeFrom(),thisEdge.getNodeTo());
+    	String edgeId = Edge.computeBidirectionalEdgeId(thisEdge.getNodeFrom(),thisEdge.getNodeTo());
     	for (Edge e : edgeMap.values()) {
 			if(directed) {
 				if(thisEdge.getId().equals(e.getId()))
@@ -78,7 +241,7 @@ public class Graph {
 				if(edgeId.equals(Edge.computeBidirectionalEdgeId(e.getNodeFrom(), e.getNodeTo())))
 					return true;
 			}
-		}*/
+		}
     	
     	return  edgeMap.get(thisEdge.getId())!=null;
     }
@@ -106,4 +269,4 @@ public class Graph {
             sb.append( "\t\tEdge[ " + edgeIndex++ + " ]: " + e.toString() + "\n" );
         return sb.toString();
     }
-}
+}*/

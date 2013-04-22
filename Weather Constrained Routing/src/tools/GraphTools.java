@@ -25,7 +25,7 @@ public class GraphTools {
 		FreeTimeWindowGraph ftwg = new FreeTimeWindowGraph();
 		
 		//convert resourcesnodes to freetimewindows
-		for(Node n : resourceGraph.getNodeMap().values()) {
+		for(Node n : resourceGraph.getNodeMap()) {
 			ResourceNode r = (ResourceNode) n;
 			
 			List<TimeWindow> freeTimeWindows =  r.getFreeTimeWindows();
@@ -36,22 +36,20 @@ public class GraphTools {
 		}
 		
 		//convert edges to relations between freetimewindows
-		for(Node u : ftwg.getNodeMap().values()) {
+		for(Node u : ftwg.getNodeMap()) {
 			FreeTimeWindowNode ftwNodeFrom = (FreeTimeWindowNode)u;
-			for(Node  n : ftwg.getNodeMap().values()) {
+			for(Node  n : ftwg.getNodeMap()) {
 				FreeTimeWindowNode ftwNodeTo = (FreeTimeWindowNode)n;
-				
 				if(ftwNodeTo == ftwNodeFrom)
 					continue;
 				
 				//check for space feasible i.e. check if there is an edge
 				if(ftwNodeFrom.getResourceNode() != ftwNodeTo.getResourceNode()) {
-					if(resourceGraph.hasEdge(new Edge(ftwNodeFrom.getResourceNode(), ftwNodeTo.getResourceNode()))) {
+					if(resourceGraph.containsEdge(new Edge(ftwNodeFrom.getResourceNode(), ftwNodeTo.getResourceNode()))) {
 						//check for time feasibility
 						if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getEntryWindow())) {
 							Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo);
-							//if(!ftwg.hasEdge(ftwEdge))
-								ftwg.addEdge(ftwEdge);
+							ftwg.addEdge(ftwEdge);
 						}
 					}
 				}
@@ -68,13 +66,13 @@ public class GraphTools {
 		ResourceGraph rg = new ResourceGraph();
 		
 		//convert nodes to resourcesnodes
-		for(Node n :graph.getNodeMap().values())
+		for(Node n :graph.getNodeMap())
 			rg.addNode(new ResourceNode(n.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, GraphConsts.DEFAULT_RESOURCE_NODE_DURATION,GraphConsts.MAX_TIME_STEPS));
 		
 		//convert edges to resourcesnodes and resourceedges
-		for(Edge e :graph.getEdgeMap().values())
+		for(Edge e :graph.getEdgeMap())
 		{
-			ResourceNode resourceNode = new ResourceNode(e.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, e.getWeight(),GraphConsts.MAX_TIME_STEPS);
+			ResourceNode resourceNode = new ResourceNode(e.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, e.getWeight(), GraphConsts.MAX_TIME_STEPS);
 			
 			Edge resourceEdgeFrom = new Edge(rg.getNode(e.getNodeFrom().getId()),resourceNode,null,1);
 			Edge resourceEdgeTo = new Edge(rg.getNode(e.getNodeTo().getId()),resourceNode,null,1);
@@ -85,7 +83,7 @@ public class GraphTools {
 		}
 		
 		
-		return rg;	
+		return rg;
     }
 	
 	public static int getMaxEdgesForGraph( int nodeCount ) {
@@ -107,7 +105,7 @@ public class GraphTools {
     
     public static Node getRandomNode(Graph graph) {
     	Random generator = new Random();
-    	Object[] values = graph.getNodeMap().values().toArray();
+    	Object[] values = graph.getNodeMap().toArray();
     	return (Node)values[generator.nextInt(values.length)];
     }
     
@@ -118,12 +116,12 @@ public class GraphTools {
         Node n2 = null;
         Edge retEdge = null;
         while ( true ) {
-            n1 = g.getNodeMap().get( keys[ rnGen.nextInt( g.getNodeCount() ) ] );
-            n2 = g.getNodeMap().get( keys[ rnGen.nextInt( g.getNodeCount() ) ] );
+            n1 = g.getNode( keys[ rnGen.nextInt( g.getNodeCount() ) ] );
+            n2 = g.getNode( keys[ rnGen.nextInt( g.getNodeCount() ) ] );
             if ( n1 == n2 ) // Skip if already have edge between these two nodes
                 continue;
             String id = Edge.computeDefaultEdgeId( n1, n2 );
-            if ( g.hasEdge(new Edge(n1,n2)))
+            if ( g.containsEdge(new Edge(n1,n2)))
                 continue;
             double edgeValue = Edge.generateRandomEdgeValue(minWeight,maxWeight);
             retEdge = new Edge(n1,n2,id,edgeValue);
@@ -148,7 +146,7 @@ public class GraphTools {
     }
 	
 	public static void printTimeWindows(ResourceGraph resourceGraph) {
-			for (Node n : resourceGraph.getNodeMap().values()) {
+			for (Node n : resourceGraph.getNodeMap()) {
 				ResourceNode rn = (ResourceNode)n;
 				
 				System.out.print(rn.getId() + " ");

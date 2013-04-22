@@ -25,8 +25,8 @@ public class TestShortestPathAlgorithms {
 	private static final String SMALL_GRAPH_DIR = "small_graphs";
 	private static final String LARGE_GRAPH_DIR = "large_graphs";
 	//private static final String DIR = "random_euclidean_graphs";
-	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, AstarAlgorithm.class, AstarWCRSolver.class);
-	private static List<Class<AstarWCRSolver>> wcrClasses = Arrays.asList(AstarWCRSolver.class);
+	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, AstarAlgorithm.class);
+	private static List<Class<AstarWCRSolver>> wcrClasses = Arrays.asList();
 	
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
@@ -44,10 +44,11 @@ public class TestShortestPathAlgorithms {
 		
 		Graph graph = GraphReader.parseGraphFromData(file);
 		
-		ResourceGraph resourceGraph = GraphTools.convertGraphToResourceGraph(graph);
+		/*ResourceGraph resourceGraph = GraphTools.convertGraphToResourceGraph(graph);
 		//resourceGraph.addRandomWeatherOverlay(GraphConsts.MAX_TIME_STEPS);
-		FreeTimeWindowGraph ftwGraph = GraphTools.convertResourceGraphToFreeTimeWindowGraph(resourceGraph);
+		FreeTimeWindowGraph ftwGraph = GraphTools.convertResourceGraphToFreeTimeWindowGraph(resourceGraph);*/
 		System.out.print(file.getName()+ "\t" + graph.getNodeCount() + "\t" + graph.getEdgeCount());
+		
 		
 		int runs = 10;
 		double[][] distance = new double[algClasses.size()][runs];
@@ -62,7 +63,7 @@ public class TestShortestPathAlgorithms {
 			int count = 0;
 			for (Class<? extends AbstractWCRSolver> algClass : algClasses) {
 				java.lang.reflect.Constructor co = algClass.getConstructor(new Class[] {Graph.class});
-				AbstractWCRSolver alg  = !wcrClasses.contains(algClass) ? (AbstractWCRSolver) co.newInstance(new Object[]{graph}) : (AbstractWCRSolver) co.newInstance(new Object[]{ftwGraph});
+				AbstractWCRSolver alg  = !wcrClasses.contains(algClass) ? (AbstractWCRSolver) co.newInstance(new Object[]{graph}) : (AbstractWCRSolver) co.newInstance(new Object[]{graph});
 				
 				long startTime = System.nanoTime();
 				List<Node> path = alg.pathTo(source, target, 0, GraphConsts.MAX_TIME_STEPS);

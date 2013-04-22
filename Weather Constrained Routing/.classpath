@@ -5,5 +5,8 @@
 	<classpathentry kind="lib" path="libs/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="libs/junit.jar"/>
 	<classpathentry kind="lib" path="libs/trove-3.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/jgraphx.jar"/>
+	<classpathentry kind="lib" path="libs/jgrapht-jdk1.6.jar"/>
+	<classpathentry kind="lib" path="libs/jgraph.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

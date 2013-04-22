@@ -17,20 +17,15 @@ public class GraphBuilder {
         
         for ( int i = 0; i < nodeCount; ++i ) {
             String nodeId = Integer.toString( g.getNodeCount() );
-            Node n = new Node(nodeId, (int)(Math.random()*width), (int)(Math.random()*height));
-            g.addNode( n );
-            //System.out.println(n.getId());
+            g.addNode(nodeId, Math.round(Math.random()*width), Math.round(Math.random()*height));
         }
         
-        for (Node n : g.getNodeMap().values()) {
-            for (Node u : g.getNodeMap().values()) {
-            	//System.out.println(u.getId());
+        for (Node n : g.getNodeMap()) {
+            for (Node u : g.getNodeMap()) {
             	if(u==n) continue;
-            	if (Node.distanceTo(n,u) < density) {
-            		Edge e = new Edge(n,u,null,(int)(Node.distanceTo(n,u)));
-					//if(!g.hasEdge(e)) 
-                    	g.addEdge( e );
-					//}
+            	double dist = Math.round(Node.distanceTo(n,u));
+            	if (dist < density) {
+            		g.addEdge(n,u,dist);
                }
             }
          }
@@ -43,7 +38,7 @@ public class GraphBuilder {
         if ( nodeCount < 1 || edgeCount < 0 ) throw new IllegalArgumentException( "nodeCount must be >= 1 and edgeCount must be >= 0!" );
         Random rnGen = new Random( System.currentTimeMillis() );
         int maxEdges = GraphTools.getMaxEdgesForGraph(nodeCount);
-        if ( edgeCount > maxEdges )
+        if ( edgeCount > 2*maxEdges )
             throw new IllegalArgumentException( "Input edgeCount (" + edgeCount + ") exceeds maximum possible edges for graph with " + nodeCount + " nodes!" );
         // Create empty Graph object
         Graph g = new Graph();
@@ -53,15 +48,16 @@ public class GraphBuilder {
         for ( int i = 0; i < nodeCount; ++i ) {
             String nodeId = Integer.toString( g.getNodeCount() );
             nodeKeys[ i ] = nodeId;
-            Node n = new Node( nodeId );
-            g.addNode( n ); // Let list index be node's id
+            g.addNode(nodeId,0, 0);
         }
+        
         // Create and add edgeList
         for ( int i = 0; i < edgeCount; ++i ) {
             Edge e = GraphTools.getRandomEdge( rnGen, g, nodeKeys,minWeight,maxWeight);
-            if(!g.hasEdge(e))
-            	g.addEdge( e );
+            g.addEdge(e);
+            g.addEdge(e.reverse());
         }
+        
         return g;
     }
 }

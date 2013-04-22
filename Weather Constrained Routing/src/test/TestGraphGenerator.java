@@ -14,7 +14,7 @@ public class TestGraphGenerator {
 
 	private static final int NUMBER_OF_GRAPHS_TO_GENERATE = 1;
 	
-	private static final int NUMBER_OF_NODES = 10;
+	private static final int NUMBER_OF_NODES = 50;
 	
 	private static final int NUMBER_OF_EDGES = 2*NUMBER_OF_NODES;
 	private static final int MIN_EDGE_VALUE = 1;
@@ -22,16 +22,16 @@ public class TestGraphGenerator {
 
 	private static final int BOX_HEIGHT = 100;
 	private static final int BOX_WIDTH = 100;
-	private static final double DENSITY = BOX_WIDTH*0.25;
+	private static final double DENSITY = BOX_WIDTH*0.05;
 	
 	
-	private static final String DATASET_DIR = "datasets";
+	private static final String DATASET_DIR = "graphs";
 	private static final String LARGE_GRAPHS_DIR = "large_graphs";
 	private static final String SMALL_GRAPHS_DIR = "small_graphs";
 	private static final String RANDOM_EUCLIDEAN_GRAPHS_DIR = "random_euclidean_graphs";
 
 	public static void main(String[] args) {
-		generateRandomEuclideanGraphs("");
+		generateRandomEuclideanGraphs(DATASET_DIR+"/");
 		//generateRandomGraphs();
 	}
 

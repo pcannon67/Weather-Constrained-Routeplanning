@@ -26,13 +26,17 @@ public class Edge implements Comparable<Edge> {
 	}
     
     public Edge(Node nodeFrom, Node nodeTo, double weight) {
-    	this(nodeFrom,nodeTo,null,1);
+    	this(nodeFrom,nodeTo,null,weight);
 	}
 
 	public String getId() {
         return id;
     }
     
+	public Edge reverse() {
+        return new Edge(nodeTo,nodeFrom,weight);
+    }
+	
     public static String computeDefaultEdgeId( Node n1, Node n2 ) {
         if ( n1 == null || n2 == null )
             throw new IllegalArgumentException( "Arguments must not be null!" );
