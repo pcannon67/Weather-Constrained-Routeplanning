@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import config.GraphConsts;
+import config.MathConsts;
 
 import tools.GraphTools;
 
@@ -21,8 +22,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 	private Map<Node,Double> entryTime;
 	private List<Node> path;
 	
-	public AstarAlgorithm(Graph graph)
-	{
+	public AstarAlgorithm(Graph graph) {
 		super(graph);
 	}
 	
@@ -79,6 +79,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 			for(Edge e : current.getNeighbors())
 			{
 				Node neighbor = GraphTools.getNeighborFromEdge(e, current);
+				
 				double tentativeGScore = distance.get(current) + e.getWeight();
 				if(closedSet.contains(neighbor)) {
 					if(tentativeGScore >= distance.get(neighbor))
@@ -89,7 +90,7 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 					cameFrom.put(neighbor, current);
 					distance.put(neighbor,tentativeGScore);
 					entryTime.put(neighbor,tentativeGScore/GraphConsts.VEHICLE_SPEED);
-					fScore.put(neighbor,distance.get(neighbor)+heuristicCostEstimate(neighbor,target));
+					fScore.put(neighbor,tentativeGScore+heuristicCostEstimate(neighbor,target));
 					openSet.add(neighbor);
 				}
 			}
@@ -123,6 +124,6 @@ public class AstarAlgorithm extends AbstractWCRSolver {
 	  }
 
 	private double heuristicCostEstimate(Node source, Node target) {
-		return 0.0;
+		return Node.distanceTo(source, target);
 	}
 }

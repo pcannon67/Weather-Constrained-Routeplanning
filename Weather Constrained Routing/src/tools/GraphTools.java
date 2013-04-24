@@ -29,32 +29,19 @@ public class GraphTools {
 			ResourceNode r = (ResourceNode) n;
 			
 			List<TimeWindow> freeTimeWindows =  r.getFreeTimeWindows();
-			for (int i = 0; i < r.getFreeTimeWindows().size(); i++) {
-				FreeTimeWindowNode ftwgNode = new FreeTimeWindowNode(r.getId()+"_"+i,freeTimeWindows.get(i),r);
-				ftwg.addNode(ftwgNode);
-			}
+			for (int i = 0; i < r.getFreeTimeWindows().size(); i++)
+				ftwg.addNode(new FreeTimeWindowNode(r.getId()+"_"+i,freeTimeWindows.get(i),r));
 		}
 		
-		//convert edges to relations between freetimewindows
-		for(Node u : ftwg.getNodeMap()) {
-			FreeTimeWindowNode ftwNodeFrom = (FreeTimeWindowNode)u;
-			for(Node  n : ftwg.getNodeMap()) {
-				FreeTimeWindowNode ftwNodeTo = (FreeTimeWindowNode)n;
-				if(ftwNodeTo == ftwNodeFrom)
-					continue;
-				
-				//check for space feasible i.e. check if there is an edge
-				if(ftwNodeFrom.getResourceNode() != ftwNodeTo.getResourceNode()) {
-					if(resourceGraph.containsEdge(new Edge(ftwNodeFrom.getResourceNode(), ftwNodeTo.getResourceNode()))) {
-						//check for time feasibility
-						if(ftwNodeFrom.getExitWindow().isOverLappingWithTimeWindow(ftwNodeTo.getEntryWindow())) {
-							Edge ftwEdge = new Edge(ftwNodeFrom, ftwNodeTo);
-							ftwg.addEdge(ftwEdge);
-						}
+		for(Edge e : resourceGraph.getEdgeMap()) {
+			List<FreeTimeWindowNode> freeTimeWindowsSource = ftwg.getFreeTimeWindowNodes((ResourceNode)e.getNodeFrom());
+			List<FreeTimeWindowNode> freeTimeWindowsTarget = ftwg.getFreeTimeWindowNodes((ResourceNode)e.getNodeTo());
+			
+			for(FreeTimeWindowNode u : freeTimeWindowsSource) {
+				for(FreeTimeWindowNode  v : freeTimeWindowsTarget) {
+					if(u.getExitWindow().isOverLappingWithTimeWindow(v.getEntryWindow())) {
+						ftwg.addEdge(new Edge(u, v));
 					}
-				}
-				else {
-					//TODO: when is it possible to add an edge when time windows in same node?
 				}
 			}
 		}
@@ -67,15 +54,15 @@ public class GraphTools {
 		
 		//convert nodes to resourcesnodes
 		for(Node n :graph.getNodeMap())
-			rg.addNode(new ResourceNode(n.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, GraphConsts.DEFAULT_RESOURCE_NODE_DURATION,GraphConsts.MAX_TIME_STEPS));
+			rg.addNode(new ResourceNode(n.getId(), n.getX(), n.getY(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, GraphConsts.DEFAULT_RESOURCE_NODE_DURATION,GraphConsts.MAX_TIME_STEPS));
 		
 		//convert edges to resourcesnodes and resourceedges
 		for(Edge e :graph.getEdgeMap())
 		{
-			ResourceNode resourceNode = new ResourceNode(e.getId(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, e.getWeight(), GraphConsts.MAX_TIME_STEPS);
+			ResourceNode resourceNode = new ResourceNode(e.getId(),e.getNodeTo().getX(),e.getNodeTo().getY(), GraphConsts.DEFAULT_RESOURCE_NODE_CAPACITY, e.getWeight(), GraphConsts.MAX_TIME_STEPS);
 			
-			Edge resourceEdgeFrom = new Edge(rg.getNode(e.getNodeFrom().getId()),resourceNode,null,1);
-			Edge resourceEdgeTo = new Edge(rg.getNode(e.getNodeTo().getId()),resourceNode,null,1);
+			Edge resourceEdgeFrom = new Edge(resourceNode,rg.getNode(e.getNodeTo().getId()),null,1);
+			Edge resourceEdgeTo = new Edge(rg.getNode(e.getNodeFrom().getId()),resourceNode,null,1);
 			
 			rg.addNode(resourceNode);
 			rg.addEdge(resourceEdgeFrom);

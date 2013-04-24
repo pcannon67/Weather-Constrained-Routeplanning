@@ -81,18 +81,16 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 			startTime = Math.max(startTime, w.getTimeWindow().getStartTime());
 			
 			openSet.add(w);
-			fScore.put(w,(double)startTime);
+			fScore.put(w,startTime+heuristicCostEstimate(w.getResourceNode(),target));
 			entryTime.put(w, startTime);
 			distance.put(w,0.0);
 		}
-		else
-			System.out.println("NO FREE TIME WINDOW FOUND AT SOURCE");
 		
 		while(!openSet.isEmpty())
 		{
 			FreeTimeWindowNode current = getMinimum(openSet,fScore);
 			ResourceNode r = current.getResourceNode();
-			
+			//System.out.print("\nMIN:"+r.getId());
 			if (r.getId().equals(target.getId())) {
 				path = reconstructPath(cameFrom, current);
 				return path;
@@ -105,16 +103,24 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 			
 			for (Edge e : current.getNeighbors()) {
 				FreeTimeWindowNode neighbor = (FreeTimeWindowNode)GraphTools.getNeighborFromEdge(e, current);
-				if(neighbor.containsTime(new TimeWindow(exitTime, current.getTimeWindow().getEndTime())))
-				{
+				
+				if(neighbor.containsTime(new TimeWindow(exitTime, current.getTimeWindow().getEndTime()))) {
 					int enterTime = Math.max(exitTime, neighbor.getTimeWindow().getStartTime());
 					int neighborEntryTime = entryTime.get(neighbor) != null ? entryTime.get(neighbor) : (int)MathConsts.INFINITY;
-					if(enterTime < neighborEntryTime) {
+					
+					if(closedSet.contains(neighbor)) {
+						if(enterTime >= neighborEntryTime){
+							continue;	
+						}
+					}
+					
+					if(!openSet.contains(neighbor) || enterTime < neighborEntryTime) {
 						cameFrom.put(neighbor, current);
 						entryTime.put(neighbor, enterTime);
-						distance.put(neighbor, distance.get(current)+neighbor.getResourceNode().getDuration()/GraphConsts.VEHICLE_SPEED);
-						fScore.put(neighbor, (double) enterTime);
+						distance.put(neighbor, distance.get(current)+neighbor.getResourceNode().getDuration());
+						fScore.put(neighbor, enterTime+heuristicCostEstimate(current.getResourceNode(),neighbor.getResourceNode()));
 						openSet.add(neighbor);
+						//System.out.print("\n"+current.getId() + "->" + neighbor.getId() + " " + exitTime);
 					}
 				}
 			}

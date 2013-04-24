@@ -19,7 +19,9 @@ public class MathTools {
 	}
 	
 	public static double euclideanDistance(double x1, double y1, double x2, double y2) {
-		return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+		double dx = Math.abs(x1-x2);
+		double dy = Math.abs(y1-y2);
+		return Math.sqrt(dx*dx+dy*dy);
 	}
 	
 	public static int avg(int[] arr) {

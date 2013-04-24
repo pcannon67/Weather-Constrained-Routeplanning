@@ -9,8 +9,8 @@ public class ResourceNode extends Node{
 	private double duration;
 	private int[] timeWindow;
 
-	public ResourceNode(String id,int capacity, double duration, int maxTimeSteps) {
-		super(id);
+	public ResourceNode(String id, double x, double y, int capacity, double duration, int maxTimeSteps) {
+		super(id,x,y);
 		this.capacity = capacity;
 		this.duration = duration;
 		timeWindow = new int[maxTimeSteps];

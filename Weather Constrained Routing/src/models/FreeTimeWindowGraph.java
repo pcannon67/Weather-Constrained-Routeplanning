@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FreeTimeWindowGraph extends Graph {
 
 	
@@ -15,5 +18,16 @@ public class FreeTimeWindowGraph extends Graph {
 				
 		}
 		return null;
+	}
+
+	public List<FreeTimeWindowNode> getFreeTimeWindowNodes(ResourceNode node) {
+		List<FreeTimeWindowNode> ftwNodes = new ArrayList<FreeTimeWindowNode>();
+		for (Node n : getNodeMap()) {
+			FreeTimeWindowNode fn = (FreeTimeWindowNode) n;
+			if(fn.getResourceNode() == node)
+				ftwNodes.add(fn);
+		}
+		return ftwNodes;
+		
 	}
 }

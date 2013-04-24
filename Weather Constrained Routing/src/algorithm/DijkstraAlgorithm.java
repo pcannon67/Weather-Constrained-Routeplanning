@@ -21,8 +21,7 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 	private Map<Node,Double> entryTime;
 	private List<Node> path;
 	
-	public DijkstraAlgorithm(Graph graph)
-	{
+	public DijkstraAlgorithm(Graph graph) {
 		super(graph);
 	}
 	
@@ -72,8 +71,6 @@ public class DijkstraAlgorithm extends AbstractWCRSolver {
 				path = reconstructPath(previous,u);
 				return path;
 			}
-			
-			if(distance.get(u) == MathConsts.INFINITY) break;
 			
 			for(Edge e : u.getNeighbors()) {
 				Node neighbor = GraphTools.getNeighborFromEdge(e, u);
