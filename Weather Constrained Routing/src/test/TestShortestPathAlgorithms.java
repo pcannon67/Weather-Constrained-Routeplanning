@@ -13,6 +13,7 @@ import algorithm.AbstractWCRSolver;
 import algorithm.AstarAlgorithm;
 import algorithm.AstarWCRSolver;
 import algorithm.DijkstraAlgorithm;
+import algorithm.DijkstraWCRSolver;
 import math.MathTools;
 import models.FreeTimeWindowGraph;
 import models.Graph;
@@ -24,13 +25,13 @@ public class TestShortestPathAlgorithms {
 	
 	private static final int RUNS = 10;
 	//private static final String DIR = "random_euclidean_graphs";
-	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, AstarAlgorithm.class, AstarWCRSolver.class);
-	private static List<Class<AstarWCRSolver>> wcrClasses = Arrays.asList(AstarWCRSolver.class);
+	private static List<Class<? extends AbstractWCRSolver>> algClasses = Arrays.asList(DijkstraAlgorithm.class, DijkstraWCRSolver.class, AstarAlgorithm.class, AstarWCRSolver.class);
+	private static List<Class<? extends AbstractWCRSolver>> wcrClasses = Arrays.asList(AstarWCRSolver.class, DijkstraWCRSolver.class);
 	
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		//runSP(new File(TestConsts.SMALL_GRAPHS_DIR+"/random_euclidean_27_112"),1);
-		File folder = new File(TestConsts.MEDIUM_GRAPHS_DIR);
+		File folder = new File(TestConsts.SMALL_GRAPHS_DIR);
 		for (File file : folder.listFiles()) {
 			runSP(file,RUNS);
 		}

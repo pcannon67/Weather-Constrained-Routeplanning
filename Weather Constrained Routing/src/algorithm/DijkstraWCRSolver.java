@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import config.GraphConsts;
 import config.MathConsts;
 
 import math.MathTools;
@@ -18,13 +17,14 @@ import models.ResourceNode;
 import models.TimeWindow;
 import tools.GraphTools;
 
-public class AstarWCRSolver extends AbstractWCRSolver {
+public class DijkstraWCRSolver extends AbstractWCRSolver {
 	
-	private Map<FreeTimeWindowNode,Integer> entryTime;
+	private Map<FreeTimeWindowNode,FreeTimeWindowNode> previous;
 	private Map<FreeTimeWindowNode,Double> distance;
+	private Map<FreeTimeWindowNode,Integer> entryTime;
 	private List<Node> path;
 	
-	public AstarWCRSolver(Graph graph)
+	public DijkstraWCRSolver(Graph graph)
 	{ 
 		super(graph);
 	}
@@ -69,35 +69,32 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 
 	@Override
 	public List<Node> pathTo(Node source, Node target, int startTime, int maxTimeSteps) {
-		List<FreeTimeWindowNode> openSet = new ArrayList<FreeTimeWindowNode>();
-		List<FreeTimeWindowNode> closedSet = new ArrayList<FreeTimeWindowNode>();
-		Map<FreeTimeWindowNode,FreeTimeWindowNode> cameFrom = new HashMap<FreeTimeWindowNode,FreeTimeWindowNode>();
-		Map<FreeTimeWindowNode,Double> fScore = new HashMap<FreeTimeWindowNode,Double>();
-		entryTime = new HashMap<FreeTimeWindowNode,Integer>();
-		distance = new HashMap<FreeTimeWindowNode,Double>();
+		distance = new HashMap<FreeTimeWindowNode, Double>();
+		entryTime = new HashMap<FreeTimeWindowNode, Integer>();
+		previous = new HashMap<FreeTimeWindowNode, FreeTimeWindowNode>();
+		List<FreeTimeWindowNode> nodes = new ArrayList<FreeTimeWindowNode>();
 		
 		FreeTimeWindowNode w = ((FreeTimeWindowGraph)graph).getFreeTimeWindowNode(new TimeWindow(startTime, maxTimeSteps),source);
 		if(w!= null) {
 			startTime = Math.max(startTime, w.getTimeWindow().getStartTime());
 			
-			openSet.add(w);
-			fScore.put(w,startTime+heuristicCostEstimate(w.getResourceNode(),target));
+			nodes.add(w);
 			entryTime.put(w, startTime);
 			distance.put(w,0.0);
+			previous.put(w, null);
 		}
 		
-		while(!openSet.isEmpty())
+		while(!nodes.isEmpty())
 		{
-			FreeTimeWindowNode current = getMinimum(openSet,fScore);
+			FreeTimeWindowNode current = getMinimum(nodes,entryTime);
 			ResourceNode r = current.getResourceNode();
 			//System.out.print("\nMIN:"+r.getId());
 			if (r.getId().equals(target.getId())) {
-				path = reconstructPath(cameFrom, current);
+				path = reconstructPath(previous, current);
 				return path;
 			}
 			
-			closedSet.add(current);
-			openSet.remove(current);
+			nodes.remove(current);
 			
 			int exitTime = entryTime.get(current) + (int)Math.ceil(current.getResourceNode().getDuration());
 			
@@ -108,15 +105,11 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 					int enterTime = Math.max(exitTime, neighbor.getTimeWindow().getStartTime());
 					int neighborEntryTime = entryTime.get(neighbor) != null ? entryTime.get(neighbor) : (int)MathConsts.INFINITY;
 					
-					if(enterTime >= neighborEntryTime &&closedSet.contains(neighbor))
-						continue;	
-					
-					if(enterTime < neighborEntryTime || !openSet.contains(neighbor)) {
-						cameFrom.put(neighbor, current);
+					if(enterTime < neighborEntryTime) {
+						previous.put(neighbor, current);
 						entryTime.put(neighbor, enterTime);
 						distance.put(neighbor, distance.get(current)+neighbor.getResourceNode().getDuration());
-						fScore.put(neighbor, enterTime+heuristicCostEstimate(current.getResourceNode(),neighbor.getResourceNode()));
-						openSet.add(neighbor);
+						nodes.add(neighbor);
 						//System.out.print("\n"+current.getId() + "->" + neighbor.getId() + " " + exitTime);
 					}
 				}
@@ -141,7 +134,7 @@ public class AstarWCRSolver extends AbstractWCRSolver {
 		}
 	}
 
-	private FreeTimeWindowNode getMinimum(List<FreeTimeWindowNode> nodes, Map<FreeTimeWindowNode, Double> fScore) {
+	private FreeTimeWindowNode getMinimum(List<FreeTimeWindowNode> nodes, Map<FreeTimeWindowNode, Integer> fScore) {
 		FreeTimeWindowNode min = null;
 		for (FreeTimeWindowNode node : nodes) {
 			if(min == null || fScore.get(node) < fScore.get(min))
