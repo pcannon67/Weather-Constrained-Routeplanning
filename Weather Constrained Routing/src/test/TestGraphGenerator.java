@@ -16,7 +16,7 @@ public class TestGraphGenerator {
 
 	private static final int NUMBER_OF_GRAPHS_TO_GENERATE = 1;
 	
-	private static final int NUMBER_OF_NODES = 15;
+	private static final int NUMBER_OF_NODES = 16;
 	
 	private static final int NUMBER_OF_EDGES = 2*NUMBER_OF_NODES;
 	private static final int MIN_EDGE_VALUE = 1;
@@ -24,7 +24,7 @@ public class TestGraphGenerator {
 
 	private static final int BOX_HEIGHT = 100;
 	private static final int BOX_WIDTH = 100;
-	private static final double DENSITY = BOX_WIDTH*0.15;
+	private static final double DENSITY = BOX_WIDTH*0.05;
 
 	public static void main(String[] args) {
 		generateRandomEuclideanGraphs(TestConsts.MEDIUM_GRAPHS_DIR+"/");
